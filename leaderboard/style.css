@@ -31,7 +31,7 @@ body {
   height: 100vh;
   overflow: hidden;
   /* Transparent for OBS, Dark for Debugging */
-  background-color: transparent !important;
+  background-color: transparent;
 }
 
 body.debug-mode {
