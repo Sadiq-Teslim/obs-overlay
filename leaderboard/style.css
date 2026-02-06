@@ -34,14 +34,14 @@ body {
   background-color: transparent !important;
 }
 
-/* body.debug-mode {
+body.debug-mode {
   background-color: var(--bg-dark);
   background-image: radial-gradient(
     circle at 50% 50%,
     rgba(191, 149, 63, 0.1),
     transparent 70%
   );
-} */
+}
 
 /* --- PANELS --- */
 .panel {
