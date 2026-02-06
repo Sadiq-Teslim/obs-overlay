@@ -1,0 +1,14 @@
+{
+  "platform": "debug_platform",
+  "room_id": "room_01",
+  "interval_ms": 30000,
+  "regions": [
+    {
+      "type": "balance",
+      "x": 80,
+      "y": 150,
+      "width": 400,
+      "height": 150
+    }
+  ]
+}

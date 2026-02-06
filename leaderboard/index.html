@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LBC Overlay</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- 1. GOAL BAR (Top Left) -->
+    <div class="panel goal-container">
+        <div class="goal-header">
+            <div class="goal-label">Daily Token Goal</div>
+            <div class="goal-nums">
+                <span id="txt-current" class="text-gold">0</span> 
+                <span class="sep">/</span> 
+                <span id="txt-target">0</span>
+            </div>
+        </div>
+        <div class="progress-track">
+            <div id="bar-fill" class="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- 2. LEADERBOARD (Top Right) -->
+    <div class="panel leaderboard">
+        <div class="lb-header">
+            <div class="lb-title">Top Contributors</div>
+        </div>
+        <ul id="lb-list" class="lb-list">
+            <li class="lb-row empty-state">Waiting for tips...</li>
+        </ul>
+    </div>
+
+    <!-- 3. ALERT POPUP (Bottom Left) -->
+    <div class="alert-zone">
+        <div id="alert-box" class="panel alert-card">
+            <div class="alert-accent"></div>
+            <div class="alert-body">
+                <div class="alert-text">
+                    <span id="alert-user" class="alert-username">USER</span>
+                    <span class="alert-message">just sent a tip!</span>
+                </div>
+                <div id="alert-amount" class="alert-badge">0 tks</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script src="script.js"></script>
+</body>
+</html>

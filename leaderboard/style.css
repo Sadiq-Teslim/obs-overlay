@@ -1,0 +1,236 @@
+:root {
+  /* --- CONFIGURATION --- */
+  --bg-dark: #0d0f12;
+  --panel-bg: rgba(5, 5, 5, 0.95);
+
+  /* Gold Gradient */
+  --gold-1: #f8e49c;
+  --gold-2: #bf953f;
+  --gold-3: #b38728;
+  --gold-gradient: linear-gradient(
+    135deg,
+    var(--gold-3),
+    var(--gold-2),
+    var(--gold-1),
+    var(--gold-2),
+    var(--gold-3)
+  );
+
+  --text-white: #ffffff;
+  --text-grey: #a7b0bc;
+  --success: #2ecc71;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 40px;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+  /* Transparent for OBS, Dark for Debugging */
+  background-color: transparent !important;
+}
+
+/* body.debug-mode {
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    rgba(191, 149, 63, 0.1),
+    transparent 70%
+  );
+} */
+
+/* --- PANELS --- */
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--gold-2);
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(191, 149, 63, 0.15);
+}
+
+.text-gold {
+  background: var(--gold-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 800;
+}
+
+/* --- GOAL BAR --- */
+.goal-container {
+  position: fixed;
+  top: 40px;
+  left: 40px;
+  width: 450px;
+  padding: 20px 25px;
+}
+
+.goal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+.goal-label {
+  font-size: 13px;
+  color: var(--text-grey);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+.goal-nums {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--text-white);
+}
+.sep {
+  color: #444;
+  margin: 0 8px;
+  font-size: 18px;
+}
+
+.progress-track {
+  height: 20px;
+  background: #1a1a1a;
+  border-radius: 10px;
+  border: 1px solid #333;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--gold-gradient);
+  transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0 20px rgba(191, 149, 63, 0.6);
+}
+
+/* --- LEADERBOARD --- */
+.leaderboard {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 300px;
+  padding-bottom: 5px;
+}
+.lb-header {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent);
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid rgba(191, 149, 63, 0.3);
+}
+.lb-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--gold-2);
+  font-weight: 900;
+}
+.lb-list {
+  list-style: none;
+  margin: 0;
+  padding: 5px 15px;
+}
+.lb-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 14px;
+}
+.lb-row:last-child {
+  border-bottom: none;
+}
+.empty-state {
+  color: #666;
+  font-style: italic;
+  font-size: 12px;
+  justify-content: center;
+}
+
+.lb-rank {
+  width: 25px;
+  color: var(--gold-3);
+  font-weight: bold;
+  font-size: 12px;
+}
+.lb-name {
+  flex: 1;
+  color: var(--text-white);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.lb-val {
+  color: var(--gold-1);
+  font-weight: 700;
+}
+.top-rank .lb-name,
+.top-rank .lb-rank {
+  color: var(--gold-1);
+}
+
+/* --- ALERTS --- */
+.alert-zone {
+  position: fixed;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.alert-card {
+  min-width: 380px;
+  display: flex;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.alert-card.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.alert-accent {
+  width: 6px;
+  background: var(--gold-gradient);
+  box-shadow: 0 0 15px rgba(191, 149, 63, 0.8);
+}
+.alert-body {
+  flex: 1;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), transparent);
+}
+.alert-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.alert-username {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--gold-1);
+  text-transform: uppercase;
+  line-height: 1;
+}
+.alert-message {
+  font-size: 14px;
+  color: var(--text-grey);
+  font-weight: 500;
+}
+.alert-badge {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--gold-2);
+  padding: 8px 14px;
+  border-radius: 6px;
+  color: var(--gold-1);
+  font-weight: bold;
+  font-size: 16px;
+}

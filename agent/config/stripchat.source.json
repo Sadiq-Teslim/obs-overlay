@@ -1,0 +1,23 @@
+{
+  "platform": "stripchat_simulator",
+  "version": 1,
+  "streams": [
+    {
+      "room_id": "room_01",
+      "balance_region": {
+        "x": 50,
+        "y": 150,
+        "width": 600,
+        "height": 400
+      },
+      "tip_popup_region": {
+        "x": 50,
+        "y": 600,
+        "width": 600,
+        "height": 200
+      },
+      "number_pattern": "\\d[\\d,.]*",
+      "min_delta_tokens": 1
+    }
+  ]
+}
