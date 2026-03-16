@@ -1,0 +1,815 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <title>LBC • Fortune 500 Tip Menu</title>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #1a1f27;
+        --panel-2: #20242b;
+        --text: #eef3f8;
+        --muted: #c4ccd6;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --accent: #7ec8ff;
+        --success: #39d98a;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.18),
+            transparent 42%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(126, 200, 255, 0.16),
+            transparent 42%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans;
+        letter-spacing: 0.2px;
+      }
+      #safe {
+        padding: clamp(12px, 2vw, 22px);
+      }
+      .panel {
+        width: min(1100px, 94vw);
+        margin: auto;
+        overflow: hidden;
+        position: relative;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.05),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(241, 199, 74, 0.35);
+      }
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.1),
+            rgba(255, 255, 255, 0) 40%
+          ),
+          conic-gradient(
+            from 180deg,
+            rgba(248, 228, 156, 0.15),
+            rgba(241, 199, 74, 0.05),
+            rgba(185, 138, 40, 0.1),
+            rgba(248, 228, 156, 0.15)
+          );
+        mix-blend-mode: soft-light;
+        opacity: 0.22;
+      }
+      .header,
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px clamp(12px, 2vw, 20px);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.28),
+          rgba(0, 0, 0, 0.12)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: none;
+      }
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .h1 {
+        margin: 0;
+        font-size: clamp(18px, 2.6vw, 30px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 2px 8px rgba(241, 199, 74, 0.18));
+      }
+      .model-pill,
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+      }
+      .model-pill {
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      .live-pill {
+        border: 1px solid rgba(57, 217, 138, 0.45);
+        background: rgba(57, 217, 138, 0.12);
+        color: var(--success);
+      }
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+      .lang-toggle {
+        display: flex;
+        gap: 6px;
+      }
+      .lang-toggle[role="tablist"] button[role="tab"] {
+        border: 1px solid rgba(241, 199, 74, 0.45);
+        background: rgba(241, 199, 74, 0.12);
+        color: var(--gold-1);
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        outline: none;
+      }
+      .lang-toggle button[aria-selected="true"] {
+        background: linear-gradient(180deg, var(--gold-2), var(--gold-3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .booster {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        margin-right: 8px;
+        background: linear-gradient(180deg, var(--accent), var(--gold-2));
+        color: #000;
+        font-weight: 900;
+        font-size: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+      }
+      .content {
+        display: grid;
+        grid-template-columns: 1.35fr 0.65fr;
+        gap: 12px;
+        padding: 12px clamp(12px, 2vw, 20px);
+      }
+      .menu {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 12px;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .card h2 {
+        margin: 0 0 8px;
+        font-size: 16px;
+        color: var(--gold-1);
+        letter-spacing: 0.4px;
+      }
+      .item {
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.05);
+        position: relative;
+        overflow: hidden;
+        transition:
+          transform 0.18s ease,
+          border-color 0.18s ease,
+          box-shadow 0.18s ease;
+      }
+      .item.hot {
+        box-shadow: 0 0 18px rgba(241, 199, 74, 0.38);
+      }
+      .item.unlocked {
+        outline: 2px solid var(--success);
+      }
+      .item__name {
+        font-weight: 900;
+      }
+      .item__sub {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .price {
+        font-weight: 900;
+        font-variant-numeric: tabular-nums;
+      }
+      .pct-chip {
+        justify-self: end;
+        font-size: 11px;
+        font-weight: 900;
+        padding: 4px 8px;
+        border-radius: 999px;
+        color: #0b1016;
+        background: linear-gradient(180deg, var(--gold-1), var(--gold-2));
+      }
+      .badges {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        grid-column: 1 / -1;
+      }
+      .badge {
+        font-size: 10px;
+        font-weight: 900;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.24);
+        color: #111;
+        background: linear-gradient(180deg, #fff, #d7d7d7);
+      }
+      .badge--goal {
+        background: linear-gradient(180deg, #e8f4ff, #b3d6ff);
+        color: #0b2942;
+        border-color: #8dbef1;
+      }
+      .badge--hot {
+        background: linear-gradient(180deg, #ffe2cc, #ffc199);
+        color: #5b2b00;
+        border-color: #ffb37e;
+      }
+      .badge--unlocked {
+        background: linear-gradient(180deg, #e7ffe7, #b7f8c1);
+        color: #083b25;
+        border-color: #9fe5b2;
+      }
+      .progress {
+        grid-column: 1/-1;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+        margin-top: 8px;
+      }
+      .progress__bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(
+          90deg,
+          var(--gold-3),
+          var(--gold-2),
+          var(--gold-1)
+        );
+        transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .rightcol {
+        display: grid;
+        grid-template-rows: auto auto auto;
+        gap: 12px;
+      }
+      .top3 {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .top3 li {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        padding: 8px 10px;
+      }
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .footer .vip {
+        font-weight: 900;
+        letter-spacing: 0.4px;
+        color: var(--gold-1);
+      }
+      .demo {
+        display: none;
+      }
+      .demo.visible {
+        display: block;
+      }
+      .notice {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 6px;
+      }
+      @media (max-width: 900px) {
+        .content {
+          grid-template-columns: 1fr;
+        }
+        .menu {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
+        .item {
+          grid-template-columns: 1fr auto;
+        }
+        .pct-chip {
+          order: 2;
+          margin-top: 6px;
+          justify-self: start;
+        }
+        .badges {
+          order: 3;
+        }
+        .progress {
+          order: 4;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="safe" data-overlay="tip-menu" data-version="v2.0">
+      <section class="panel">
+        <header class="header">
+          <div class="header__left">
+            <h1 class="h1" id="title">Tip Menu</h1>
+            <span class="model-pill"
+              >Model: <strong id="modelName">Carmen Ruiz</strong></span
+            >
+            <span class="live-pill"
+              ><span class="dot" aria-hidden="true"></span
+              ><span id="liveText">Active</span></span
+            >
+          </div>
+          <div class="header__right">
+            <span class="booster" id="booster">+20% Booster Active</span>
+            <div class="lang-toggle" id="langTabs" role="tablist">
+              <button role="tab" data-lang="en" aria-selected="true">
+                ENG
+              </button>
+              <button role="tab" data-lang="es" aria-selected="false">
+                ESP
+              </button>
+              <button role="tab" data-lang="fr" aria-selected="false">
+                FRA
+              </button>
+            </div>
+          </div>
+        </header>
+        <div class="content">
+          <section class="card" aria-labelledby="servicesHeader">
+            <h2 id="servicesHeader">Services</h2>
+            <div
+              class="small"
+              id="liveAnnounce"
+              aria-live="polite"
+              aria-atomic="true"
+            ></div>
+            <div class="menu" id="menu"></div>
+            <div class="notice" id="bundleNudge">
+              Bundle suggestion: Combine Shower Scene + Sensual Stripping for a
+              premium experience.
+            </div>
+          </section>
+          <aside class="rightcol">
+            <section class="card" aria-labelledby="top3Header">
+              <h2 id="top3Header">Top Items This Session</h2>
+              <ol class="top3" id="top3"></ol>
+              <div class="small" id="top3Note">
+                Updates in real time as tips come in.
+              </div>
+            </section>
+            <section class="card demo" id="demoPanel">
+              <h2>Demo Controls (no backend)</h2>
+              <label class="small" for="demoItem">Send simulated tip</label>
+              <div
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px"
+              >
+                <select id="demoItem">
+                  <option value="foot_fetish">Foot Fetish</option>
+                  <option value="shower_scene">Shower Scene</option>
+                  <option value="sensual_stripping">Sensual Stripping</option>
+                  <option value="shoutout">ShoutOut</option>
+                  <option value="dirty_talk">Dirty Talk</option>
+                </select>
+                <input id="demoAmount" type="number" value="75" min="1" />
+              </div>
+              <button id="btnDemoTip" style="margin-top: 8px">Tip</button>
+            </section>
+          </aside>
+        </div>
+        <footer class="footer">
+          <div class="small" id="footLeft">
+            Source: /data/overlay/tipmenu.json (auto-rotating languages)
+          </div>
+          <div class="vip" id="vipBanner">
+            High rollers: unlock goals faster during Booster.
+          </div>
+        </footer>
+      </section>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const CONFIG_URL =
+        params.get("config") ||
+        params.get("json") ||
+        "/data/overlay/tipmenu.json";
+      const WS_URL = params.get("ws") || "wss://overlays.lbc.domain/ws/events";
+      const DEMO = params.get("demo") === "1";
+      const ROOM = params.get("room_id") || "demo_room";
+      const MODEL = params.get("model") || "Carmen Ruiz";
+
+      const DEFAULT_CONFIG = {
+        model: MODEL,
+        languages: ["en", "es", "fr"],
+        i18n: {
+          en: {
+            title: "Tip Menu",
+            services: "Services",
+            active: "Active",
+            badges: { goal: "GOAL", hot: "HOT", unlocked: "UNLOCKED" },
+            bundle:
+              "Bundle suggestion: Combine Shower Scene + Sensual Stripping for a premium experience.",
+            top3: "Top Items This Session",
+            top3Note: "Updates in real time as tips come in.",
+            items: {
+              foot_fetish: {
+                name: "Foot Fetish",
+                desc: "Focused foot play",
+                price: 75,
+                goal: 750,
+              },
+              shower_scene: {
+                name: "Shower Scene",
+                desc: "Wet & wild shower show",
+                price: 200,
+                goal: 1000,
+              },
+              sensual_stripping: {
+                name: "Sensual Stripping",
+                desc: "Slow tease performance",
+                price: 200,
+              },
+              shoutout: {
+                name: "ShoutOut",
+                desc: "Personal name call on stream",
+                price: 5,
+              },
+              dirty_talk: {
+                name: "Dirty Talk",
+                desc: "Spicy roleplay",
+                price: 50,
+                goal: 500,
+              },
+            },
+          },
+          es: {
+            title: "Menú de Propinas",
+            services: "Servicios",
+            active: "En vivo",
+            badges: {
+              goal: "META",
+              hot: "TENDENCIA",
+              unlocked: "DESBLOQUEADO",
+            },
+            bundle:
+              "Sugerencia: Ducha + Striptease para una experiencia premium.",
+            top3: "Top Ítems de la Sesión",
+            top3Note: "Se actualiza en real time.",
+            items: {
+              foot_fetish: {
+                name: "Fetiche de Pies",
+                desc: "Enfoque total en pies",
+                price: 75,
+                goal: 750,
+              },
+              shower_scene: {
+                name: "Escena de Ducha",
+                desc: "Show en la ducha",
+                price: 200,
+                goal: 1000,
+              },
+              sensual_stripping: {
+                name: "Striptease Sensual",
+                desc: "Desnudo sensual",
+                price: 200,
+              },
+              shoutout: {
+                name: "Mención",
+                desc: "Saludo personalizado en vivo",
+                price: 5,
+              },
+              dirty_talk: {
+                name: "Charla Sucia",
+                desc: "Juego de roles picante",
+                price: 50,
+                goal: 500,
+              },
+            },
+          },
+          fr: {
+            title: "Menu des Pourboires",
+            services: "Prestations",
+            active: "En direct",
+            badges: {
+              goal: "OBJECTIF",
+              hot: "CHAUD",
+              unlocked: "DÉVERROUILLÉ",
+            },
+            bundle:
+              "Suggestion : Douche + Effeuillage pour une expérience premium.",
+            top3: "Top de la Session",
+            top3Note: "Mises à jour en temps réel.",
+            items: {
+              foot_fetish: {
+                name: "Fétichisme des Pieds",
+                desc: "Focus pieds",
+                price: 75,
+                goal: 750,
+              },
+              shower_scene: {
+                name: "Scène Douche",
+                desc: "Show sous la douche",
+                price: 200,
+                goal: 1000,
+              },
+              sensual_stripping: {
+                name: "Effeuillage Sensuel",
+                desc: "Tease lent",
+                price: 200,
+              },
+              shoutout: {
+                name: "ShoutOut",
+                desc: "Appel du nom en direct",
+                price: 5,
+              },
+              dirty_talk: {
+                name: "Paroles Cochones",
+                desc: "Jeu de rôle épicé",
+                price: 50,
+                goal: 500,
+              },
+            },
+          },
+        },
+        itemsOrder: [
+          "foot_fetish",
+          "shower_scene",
+          "sensual_stripping",
+          "shoutout",
+          "dirty_talk",
+        ],
+      };
+      let CFG = DEFAULT_CONFIG;
+      let LANG = (CFG.languages && CFG.languages[0]) || "en";
+      let rotateTimer = null;
+      let spotlightIndex = 0;
+      let boosterOn = true;
+      let session = {};
+
+      function initializeSession() {
+        session = {};
+        if (CFG.itemsOrder) {
+          for (const k of CFG.itemsOrder) session[k] = { paid: 0, count: 0 };
+        }
+      }
+      initializeSession();
+
+      const modelNameEl = document.getElementById("modelName");
+      const titleEl = document.getElementById("title");
+      const servicesHeaderEl = document.getElementById("servicesHeader");
+      const bundleNudgeEl = document.getElementById("bundleNudge");
+      const menuEl = document.getElementById("menu");
+      const top3El = document.getElementById("top3");
+      const top3HeaderEl = document.getElementById("top3Header");
+      const top3NoteEl = document.getElementById("top3Note");
+      const langTabs = document.getElementById("langTabs");
+      const liveAnnounce = document.getElementById("liveAnnounce");
+
+      function money(v) {
+        return "$" + Math.round(v);
+      }
+      function pct(a, b) {
+        return !b ? 0 : Math.max(0, Math.min(100, Math.round((a / b) * 100)));
+      }
+
+      (async function initConfig() {
+        if (CONFIG_URL) {
+          try {
+            const r = await fetch(CONFIG_URL, { cache: "no-cache" });
+            const j = await r.json();
+            if (j.i18n && j.itemsOrder) {
+              CFG = j;
+              initializeSession();
+            }
+          } catch (e) {
+            console.warn("Using default. Error:", e.message);
+          }
+        }
+        modelNameEl.textContent = CFG.model || MODEL;
+        setupLangTabs(CFG.languages || ["en", "es", "fr"]);
+        setLang(LANG, true);
+        renderMenu();
+        renderTop3();
+        startRotate();
+        setupDemoAndWS();
+      })();
+
+      function setupLangTabs(list) {
+        langTabs.querySelectorAll('[role="tab"]').forEach((btn) => {
+          btn.addEventListener("click", () => setLang(btn.dataset.lang, false));
+        });
+      }
+      function setLang(code, fromAuto = false) {
+        LANG = (CFG.languages || []).includes(code) ? code : "en";
+        langTabs
+          .querySelectorAll('[role="tab"]')
+          .forEach((b) =>
+            b.setAttribute("aria-selected", String(b.dataset.lang === LANG)),
+          );
+        const t = CFG.i18n[LANG];
+        titleEl.textContent = t.title;
+        servicesHeaderEl.textContent = t.services;
+        top3HeaderEl.textContent = t.top3;
+        top3NoteEl.textContent = t.top3Note;
+        bundleNudgeEl.textContent = t.bundle;
+        if (!fromAuto && rotateTimer) {
+          clearInterval(rotateTimer);
+          rotateTimer = null;
+        }
+        renderMenu();
+        renderTop3();
+      }
+      function startRotate() {
+        let idx = (CFG.languages || []).indexOf(LANG);
+        rotateTimer = setInterval(() => {
+          if (document.hidden) return;
+          idx = (idx + 1) % (CFG.languages || []).length;
+          setLang(CFG.languages[idx], true);
+        }, 15000);
+      }
+
+      function renderMenu() {
+        const t = CFG.i18n[LANG];
+        const order = CFG.itemsOrder || [];
+        const items = order.map((k) => ({ key: k, ...(t.items[k] || {}) }));
+        const hottestKey = order
+          .map((k) => ({ k, amt: session[k]?.paid || 0 }))
+          .sort((a, b) => b.amt - a.amt)[0]?.k;
+        menuEl.innerHTML = "";
+        items.forEach((it) => {
+          const key = it.key;
+          if (!session[key]) return;
+          const s = session[key];
+          const goal = Number(it.goal || 0);
+          const paid = Number(s.paid || 0);
+          const p = goal > 0 ? pct(paid, goal) : 0;
+          const unlocked = goal > 0 && paid >= goal;
+          const card = document.createElement("div");
+          card.className = `item ${unlocked ? "unlocked" : ""} ${hottestKey === key && paid > 0 ? "hot" : ""}`;
+          card.innerHTML = `
+            <div><div class="item__name">${it.name}</div><div class="item__sub">${it.desc} ${s.count > 0 ? ` • ${s.count} requests` : ""}</div></div>
+            <div class="price">${money(it.price)}</div>
+            <div class="pct-chip">${goal > 0 ? `${p}%` : money(paid)}</div>
+            <div class="badges">
+              ${goal > 0 ? `<span class="badge badge--goal">${t.badges.goal} ${money(goal)}</span>` : ""}
+              ${hottestKey === key && paid > 0 ? `<span class="badge badge--hot">${t.badges.hot}</span>` : ""}
+              ${unlocked ? `<span class="badge badge--unlocked">${t.badges.unlocked}</span>` : ""}
+            </div>
+            <div class="progress"><div class="progress__bar" style="width: ${goal > 0 ? p : 0}%"></div></div>
+          `;
+          menuEl.appendChild(card);
+        });
+      }
+      function renderTop3() {
+        const t = CFG.i18n[LANG];
+        const order = CFG.itemsOrder || [];
+        const coll = order
+          .map((k) => ({
+            k,
+            name: t.items[k]?.name || k,
+            amt: session[k].paid,
+          }))
+          .sort((a, b) => b.amt - a.amt)
+          .slice(0, 3);
+        top3El.innerHTML = coll
+          .map(
+            (r, i) =>
+              `<li><span>${i + 1}. ${r.name}</span><span>${money(r.amt)}</span></li>`,
+          )
+          .join("");
+      }
+
+      function setupDemoAndWS() {
+        if (DEMO) {
+          document.getElementById("demoPanel").classList.add("visible");
+          document.getElementById("btnDemoTip").onclick = () =>
+            registerTip(
+              document.getElementById("demoItem").value,
+              Number(document.getElementById("demoAmount").value),
+            );
+        }
+        if (WS_URL) wsConnectWithBackoff(WS_URL);
+      }
+      let ws,
+        backoffMs = 1000;
+      function wsConnectWithBackoff(url) {
+        try {
+          ws = new WebSocket(url);
+          ws.onopen = () => {
+            backoffMs = 1000;
+            ws.send(JSON.stringify({ type: "subscribe", room_id: ROOM }));
+          };
+          ws.onmessage = (evt) => {
+            try {
+              const m = JSON.parse(evt.data);
+              const payload = m.event ? m.event : m;
+              if (payload.type === "tip" || payload.event_type === "tip")
+                registerTip(
+                  payload.item || payload.payload?.raw_tip_text,
+                  payload.amount_tokens || payload.amount,
+                );
+            } catch {}
+          };
+          ws.onclose = () =>
+            setTimeout(
+              () => wsConnectWithBackoff(url),
+              (backoffMs = Math.min(backoffMs * 2, 30000)),
+            );
+        } catch {
+          setTimeout(() => wsConnectWithBackoff(url), 5000);
+        }
+      }
+      function registerTip(key, amount) {
+        // Simple logic to map random tip text to an item if exact key doesn't match
+        let targetKey = key;
+        if (!session[key])
+          targetKey =
+            CFG.itemsOrder[Math.floor(Math.random() * CFG.itemsOrder.length)];
+
+        if (session[targetKey] && amount > 0) {
+          session[targetKey].paid += Math.round(amount * (boosterOn ? 1.2 : 1));
+          session[targetKey].count += 1;
+          renderMenu();
+          renderTop3();
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,58 @@
+{
+  "version": "1.0",
+  "current_trivia": {
+    "question": {
+      "en": "How many nights a week do Latinas like intimacy?",
+      "es": "¿Cuántas noches a la semana prefieren intimidad las latinas?",
+      "fr": "Combien de nuits par semaine les Latinas aiment-elles l’intimité ?"
+    },
+    "refresh": 10,
+    "options": [
+      {
+        "id": "two",
+        "label": {
+          "en": "2 nights",
+          "es": "2 noches",
+          "fr": "2 nuits"
+        },
+        "value": 15
+      },
+      {
+        "id": "three",
+        "label": {
+          "en": "3 nights",
+          "es": "3 noches",
+          "fr": "3 nuits"
+        },
+        "value": 22
+      },
+      {
+        "id": "four",
+        "label": {
+          "en": "4 nights",
+          "es": "4 noches",
+          "fr": "4 nuits"
+        },
+        "value": 28
+      },
+      {
+        "id": "five",
+        "label": {
+          "en": "5 nights",
+          "es": "5 noches",
+          "fr": "5 nuits"
+        },
+        "value": 20
+      },
+      {
+        "id": "daily",
+        "label": {
+          "en": "Every night",
+          "es": "Todas las noches",
+          "fr": "Chaque nuit"
+        },
+        "value": 15
+      }
+    ]
+  }
+}

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>LBC • Countdown Challenge</title>
+<style>
+:root{
+  --bg:#0d0f12; --panel:#1a1f27; --panel2:#20242b;
+  --text:#e9edf2; --muted:#a7b0bc;
+  --gold1:#f8e49c; --gold2:#f1c74a; --gold3:#b98a28;
+  --success:#39d98a; --danger:#ff6b6b; --focus:#7ec8ff;
+  --shadow:0 10px 24px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; color:var(--text);
+  background:
+    radial-gradient(1200px 700px at 20% -10%, rgba(241,199,74,.20), transparent 42%),
+    radial-gradient(1600px 900px at 120% 120%, rgba(185,138,40,.14), transparent 42%),
+    var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, Noto Sans;
+  letter-spacing:.2px;
+}
+.wrap{padding:clamp(12px,2vw,22px)}
+.panel{
+  width:min(1080px,94vw); margin:auto; overflow:hidden; position:relative;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border-radius:16px; box-shadow:var(--shadow);
+  border:1px solid rgba(241,199,74,.35);
+}
+.header,.footer{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding:12px clamp(12px,2vw,20px);
+  background:linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.12));
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.footer{border-top:1px solid rgba(255,255,255,.10); border-bottom:none}
+.h1{
+  margin:0; font-size:clamp(20px,3vw,34px); letter-spacing:.6px; text-transform:uppercase;
+  background:linear-gradient(90deg,var(--gold1),var(--gold2),var(--gold3));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  filter:drop-shadow(0 2px 8px rgba(241,199,74,.18))
+}
+.header__left{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.live-pill{
+  display:inline-flex; align-items:center; gap:8px;
+  font-weight:800; font-size:12px; padding:6px 10px; border-radius:999px;
+  background:rgba(57,217,138,.1); color:var(--success); border:1px solid rgba(57,217,138,.5)
+}
+.dot{width:10px;height:10px;border-radius:50%; background:var(--success);
+  box-shadow:0 0 0 0 rgba(57,217,138,.7); animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(57,217,138,.7)}70%{box-shadow:0 0 0 12px rgba(57,217,138,0)}100%{box-shadow:0 0 0 0 rgba(57,217,138,0)}}
+.model{font-weight:800; color:var(--gold1)}
+.lang-toggle{display:flex; gap:6px}
+.lang-toggle button{
+  border:1px solid rgba(241,199,74,.45); background:rgba(241,199,74,.12); color:var(--gold1);
+  padding:6px 10px; border-radius:999px; font-size:12px; font-weight:800; cursor:pointer;
+}
+.lang-toggle button:focus-visible{
+  outline:2px solid transparent;
+  box-shadow:0 0 0 3px var(--focus), 0 0 14px rgba(126,200,255,.45);
+  border-color:var(--focus);
+}
+.lang-toggle button[aria-pressed="true"]{
+  background:linear-gradient(180deg,var(--gold2),var(--gold3)); color:#111; border-color:rgba(0,0,0,.2)
+}
+
+.content{display:grid; grid-template-columns:1.3fr .7fr; gap:14px; padding:12px clamp(12px,2vw,20px)}
+.block{
+  background:linear-gradient(180deg,var(--panel),var(--panel2));
+  border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:14px
+}
+.block h2{margin:0 0 10px; font-size:16px; color:var(--gold1); letter-spacing:.4px}
+.timer{display:grid; gap:10px; text-align:center}
+.clock{font-size:clamp(34px,8vw,66px); font-weight:900; letter-spacing:.04em}
+.timerbar{height:14px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden}
+.timerbar__fill{height:100%; width:100%; background:linear-gradient(90deg,#ff9a9a,var(--gold2),var(--success)); transition:width .5s linear}
+
+.goal{
+  display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+  padding:10px; border-radius:12px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.10)
+}
+.goal .meter{height:12px; border-radius:999px; background:rgba(255,255,255,.10); overflow:hidden}
+.goal .meter__fill{height:100%; width:0%; background:linear-gradient(90deg,var(--gold3),var(--gold2),var(--gold1)); transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.small{font-size:12px; color:var(--muted)}
+
+.kpis{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.kpi{background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10); border-radius:10px; padding:10px; text-align:center}
+.kpi .val{font-weight:900; font-variant-numeric:tabular-nums; margin-top:4px}
+
+.rightcol{display:grid; grid-template-rows:auto auto; gap:12px}
+.list{list-style:none; margin:8px 0 0; padding:0; display:flex; flex-direction:column; gap:8px}
+.list li{
+  display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;
+  padding:8px 10px; border-radius:10px; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.10);
+  transition:box-shadow .3s, border-color .3s;
+}
+.badge{font-size:10px; font-weight:900; letter-spacing:.3px; padding:3px 8px; border-radius:999px; border:1px solid rgba(255,255,255,.24); color:#111; background:linear-gradient(180deg,#fff,#d7d7d7)}
+.badge--whale{background:linear-gradient(180deg,#ffe2cc,#ffc199); color:#5b2b00; border-color:#ffb37e}
+
+.recent-current{box-shadow:0 0 0 2px rgba(126,200,255,.6), 0 0 16px rgba(126,200,255,.35)}
+.leader-top{box-shadow:0 0 0 2px rgba(241,199,74,.6), 0 0 18px rgba(241,199,74,.35); border-color:rgba(241,199,74,.55)!important}
+
+.sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0}
+.footer .note{font-size:12px; color:var(--muted)}
+
+@media (max-width:900px){ .content{grid-template-columns:1fr} .kpis{grid-template-columns:1fr 1fr} }
+@media (max-width:560px){ .kpis{grid-template-columns:1fr} .list li{grid-template-columns:1fr auto} }
+@media (prefers-reduced-motion:reduce){ .timerbar__fill,.goal .meter__fill{transition:none} .dot{animation:none; box-shadow:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="panel" aria-label="Countdown Overlay">
+    <div id="sr-announce" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+    <header class="header">
+      <div class="header__left">
+        <h1 class="h1" id="hdr">🔥 Countdown Challenge</h1>
+        <span class="live-pill"><span class="dot" aria-hidden="true"></span><span id="liveTxt">Live Show: Active</span></span>
+        <span class="model" id="modelName">Model: Carmen Ruiz</span>
+        <span class="small" id="roundInfo" style="margin-left:8px;opacity:.8">Round 1/4</span>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button data-lang="en" aria-pressed="true">ENG</button>
+        <button data-lang="es" aria-pressed="false">ESP</button>
+        <button data-lang="fr" aria-pressed="false">FRA</button>
+      </div>
+    </header>
+    <div class="content">
+      <section class="block">
+        <h2 id="titleLine">Tip $150 before time ends to unlock the surprise show!</h2>
+        <div class="timer" aria-live="polite" aria-atomic="true">
+          <div class="clock" id="clock">03:00</div>
+          <div class="timerbar" aria-hidden="true"><div id="timeFill" class="timerbar__fill"></div></div>
+        </div>
+        <div class="goal" style="margin-top:12px">
+          <div>
+            <div class="small" id="goalLabel">Progress</div>
+            <div class="meter"><div id="goalFill" class="meter__fill"></div></div>
+            <div class="small" id="goalNums">$0 of $150</div>
+          </div>
+          <div class="kpis">
+            <div class="kpi">
+              <div class="small" id="kTopFanLbl">Top Fan</div><div class="val" id="kTopFan">—</div>
+            </div>
+            <div class="kpi">
+              <div class="small" id="kContribLbl">Contributors</div><div class="val" id="kContribs">0</div>
+            </div>
+            <div class="kpi">
+              <div class="small" id="kAvgLbl">Avg Tip</div><div class="val" id="kAvg">$0</div>
+            </div>
+          </div>
+        </section>
+      <aside class="rightcol">
+        <section class="block" aria-labelledby="recentHdr">
+          <h2 id="recentHdr">Recent Tips (last 5)</h2><ol class="list" id="recentList"></ol>
+        </section>
+        <section class="block" aria-labelledby="leaderHdr">
+          <h2 id="leaderHdr">Leaderboard</h2><ol class="list" id="leaderList"></ol>
+        </section>
+      </aside>
+    </div>
+    <footer class="footer">
+      <div class="note" id="footNote">Source: <strong>/data/overlay/countdown.json</strong></div>
+      <div class="note">Status: <strong id="statusStrong">Live</strong></div>
+    </footer>
+    <canvas id="confetti" style="position:absolute; inset:0; pointer-events:none;"></canvas>
+  </section>
+</div>
+<script>
+const p = new URLSearchParams(location.search);
+const JSON_URL = p.get('json') || "/data/overlay/countdown.json";
+const WS_URL = p.get('ws') || "wss://overlays.lbc.domain/ws/events";
+const ROOM = p.get('room_id') || "demo_room";
+
+// Defaults (can be overridden by JSON fetch)
+let BASE_DURATION = parseInt(p.get('duration')||'180',10);
+let GOAL = parseFloat(p.get('goal')||'150');
+let CURRENCY = p.get('currency') || 'USD';
+let maxResets = 3;
+
+let I18N = {
+  en:{ header:'🔥 Countdown Challenge', live:'Live Show: Active', model:'Model: Carmen Ruiz',
+       title:`Tip ${money(GOAL,CURRENCY)} before time ends to unlock the surprise show!`,
+       goalLabel:'Progress', recent:'Recent Tips (last 5)', leaders:'Leaderboard',
+       kTopFan:'Top Fan', kContribs:'Contributors', kAvg:'Avg Tip',
+       foot:'Source: /data/overlay/countdown.json', round:'Round', goalReached:'Goal reached! Show unlocked.' },
+  es:{ header:'🔥 Desafío con Cuenta Regresiva', live:'Show en Vivo: Activo', model:'Modelo: Carmen Ruiz',
+       title:`¡Dona ${money(GOAL,CURRENCY)} antes de que termine el tiempo para desbloquear el show!`,
+       goalLabel:'Progreso', recent:'Propinas Recientes (últimas 5)', leaders:'Tabla de Clasificación',
+       kTopFan:'Mejor Fan', kContribs:'Contribuyentes', kAvg:'Propina Prom.',
+       foot:'Fuente: /data/overlay/countdown.json', round:'Ronda', goalReached:'¡Meta alcanzada! Show desbloqueado.' },
+  fr:{ header:'🔥 Défi à Compte à Rebours', live:'Show en Direct : Actif', model:'Modèle : Carmen Ruiz',
+       title:`Contribuez ${money(GOAL,CURRENCY)} avant la fin pour débloquer le show !`,
+       goalLabel:'Progression', recent:'Pourboires Récents (5 derniers)', leaders:'Classement',
+       kTopFan:'Fan N°1', kContribs:'Contributeurs', kAvg:'Pourboire Moy.',
+       foot:'Source : /data/overlay/countdown.json', round:'Manche', goalReached:'Objectif atteint ! Show débloqué.' }
+};
+
+let lang='en';
+const langBtns=document.querySelectorAll('.lang-toggle button');
+langBtns.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang,true)));
+let langIdx=0; const langCycle=['en','es','fr'];
+setInterval(()=>{ if(document.hidden) return; langIdx=(langIdx+1)%langCycle.length; setLang(langCycle[langIdx], false); }, 15000);
+
+function setLang(code, userAction){
+  lang = ['en','es','fr'].includes(code)?code:'en';
+  langBtns.forEach(b=>b.setAttribute('aria-pressed', String(b.dataset.lang===lang)));
+  const t=I18N[lang];
+  document.title='LBC • '+t.header; T('hdr',t.header); T('liveTxt',t.live); T('modelName',t.model);
+  T('titleLine',t.title); T('goalLabel',t.goalLabel); T('recentHdr',t.recent); T('leaderHdr',t.leaders);
+  T('kTopFanLbl',t.kTopFan); T('kContribLbl',t.kContribs); T('kAvgLbl',t.kAvg); T('footNote',t.foot);
+  updateRoundLabel(); if(userAction) langIdx = langCycle.indexOf(lang);
+}
+
+// Data Loading (Fetch JSON from Master Poller)
+async function loadConfig() {
+  try {
+    const res = await fetch(JSON_URL, { cache: "no-cache" });
+    if(res.ok) {
+      const data = await res.json();
+      GOAL = data.goal || GOAL;
+      BASE_DURATION = data.duration_sec || BASE_DURATION;
+      maxResets = data.max_round_resets || maxResets;
+      CURRENCY = data.currency || CURRENCY;
+      if(data.model && data.model.name) {
+        I18N.en.model = `Model: ${data.model.name}`;
+        I18N.es.model = `Modelo: ${data.model.name}`;
+        I18N.fr.model = `Modèle : ${data.model.name}`;
+      }
+      if(data.messages) {
+        I18N.en.title = data.messages.en || I18N.en.title;
+        I18N.es.title = data.messages.es || I18N.es.title;
+        I18N.fr.title = data.messages.fr || I18N.fr.title;
+      }
+      setLang(lang, false); // re-apply updated UI text
+    }
+  } catch(e) { console.warn("Failed to load JSON config, using defaults."); }
+}
+
+let round = 1; 
+let startTs = Date.now(); let endTs = startTs + BASE_DURATION*1000;
+let total=0; const contributors=new Map(); let recent=[];
+
+function resetRound(){ round++; startTs = Date.now(); endTs = startTs + BASE_DURATION*1000; updateRoundLabel(true); requestAnimationFrame(tick); }
+function updateRoundLabel(announceIt=false){ const t = I18N[lang]; const txt = `${t.round} ${round}/${1+maxResets}`; T('roundInfo', txt); if(announceIt) announce(txt); }
+function announce(msg){ const el = gid('sr-announce'); el.textContent=''; setTimeout(()=>{ el.textContent = msg; }, 20); }
+
+requestAnimationFrame(tick);
+function tick(){
+  const now=Date.now(); const remain=Math.max(0,Math.floor((endTs-now)/1000));
+  T('clock',fmt(remain)); const dur=endTs-startTs; const passed=Math.max(0,Math.min(1,(now-startTs)/dur));
+  gid('timeFill').style.width=Math.round((1-passed)*100)+'%';
+  if(remain<=0){ if(total >= GOAL){ fireConfetti(); announce(I18N[lang].goalReached); return; } if(round <= maxResets){ resetRound(); return; } return; }
+  requestAnimationFrame(tick);
+}
+
+let needsRender=false;
+function scheduleRender(){ if(!needsRender){ needsRender=true; requestAnimationFrame(()=>{ needsRender=false; render(); }); } }
+function tip(name,amount){ if(!(amount>0))return; total+=amount; contributors.set(name,(contributors.get(name)||0)+amount); recent.push({name,amount,t:Date.now()}); if(recent.length>50) recent=recent.slice(-50); scheduleRender(); }
+
+if(WS_URL){
+  try{
+    const ws = new WebSocket(WS_URL);
+    ws.onopen = () => { ws.send(JSON.stringify({ type: "subscribe", room_id: ROOM })); };
+    ws.onmessage = (evt)=>{ 
+      try{ 
+        const msg = JSON.parse(evt.data); 
+        const payload = msg.event ? msg.event : msg;
+        if(payload.type==='tip' || payload.event_type==='tip'){ 
+          tip(payload.username || payload.user?.name || 'User', +(payload.amount_tokens || payload.amount)||0); 
+        } 
+      }catch(e){ console.error(e) } 
+    };
+  }catch{}
+}
+
+function render(){
+  const pct=Math.max(0,Math.min(100,Math.round((total/GOAL)*100)));
+  gid('goalFill').style.width=pct+'%'; T('goalNums', `${money(total)} of ${money(GOAL)}`);
+  const arr=[...contributors.entries()].map(([name,amt])=>({name,amt})).sort((a,b)=>b.amt-a.amt);
+  T('kTopFan', arr[0]?.name || '—'); T('kContribs', String(arr.length));
+  const tipsCount = recent.length; T('kAvg', tipsCount ? money(Math.round(total/tipsCount)) : money(0));
+  const r=gid('recentList'); r.innerHTML=''; const last5 = recent.slice(-5).reverse();
+  last5.forEach((x,i)=>{ const li=document.createElement('li'); const left=document.createElement('div'); left.textContent=x.name; const right=document.createElement('div'); right.textContent=(x.amount>=0?'+':'−')+money(Math.abs(x.amount)); if(x.amount>=200) right.className='badge badge--whale'; if(i===0) li.classList.add('recent-current'); li.appendChild(left); li.appendChild(right); r.appendChild(li); });
+  const l=gid('leaderList'); l.innerHTML='';
+  arr.slice(0,5).forEach((x,i)=>{ const li=document.createElement('li'); const left=document.createElement('div'); left.textContent=`${i+1}. ${x.name}`; const right=document.createElement('div'); right.textContent=money(x.amt); if(i===0) li.classList.add('leader-top'); li.appendChild(left); li.appendChild(right); l.appendChild(li); });
+}
+
+function T(id, txt){ gid(id).textContent = txt }
+function gid(id){ return document.getElementById(id) }
+function money(v,cur=CURRENCY){ try{ return new Intl.NumberFormat(undefined,{style:'currency',currency:cur,maximumFractionDigits:0}).format(v);}catch{ return '$'+Math.round(v);} }
+function fmt(sec){ const m=Math.floor(sec/60), s=sec%60; return String(m).padStart(2,'0')+':'+String(s).padStart(2,'0') }
+
+function fireConfetti(){
+  const c = document.getElementById('confetti'); const ctx = c.getContext('2d'); const dpr = Math.max(1, window.devicePixelRatio||1);
+  const resize=()=>{ c.width = c.clientWidth*dpr; c.height = c.clientHeight*dpr; }; resize(); window.addEventListener('resize', resize, {once:true});
+  const parts = Array.from({length:180}, (_,i)=>({ x: Math.random()*c.width, y: -Math.random()*c.height*0.5, r: 3+Math.random()*4, vx: -1+Math.random()*2, vy: 2+Math.random()*3, a: Math.random()*Math.PI*2, s: 0.04+Math.random()*0.06, col: `hsl(${Math.random()*360},90%,60%)`, life: 120+Math.random()*60 }));
+  let frame=0;
+  (function loop(){ frame++; ctx.clearRect(0,0,c.width,c.height); parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.a+=p.s; p.vy+=0.02; p.life-=1; ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle=p.col; ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2); ctx.restore(); }); if(frame<240) requestAnimationFrame(loop); else ctx.clearRect(0,0,c.width,c.height); })();
+}
+
+// Initialization
+loadConfig().then(() => {
+  render(); 
+  setLang('en', true);
+});
+
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'countdown.tip') {
+        tip(event.data.data.name, event.data.data.amount);
+    }
+    if (event.data && event.data.type === 'latency_ping') {
+        window.parent.postMessage({ type: 'latency_pong', start: event.data.start }, '*');
+    }
+});
+</script>
+</body>
+</html>

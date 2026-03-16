@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#0d0f12" />
+    <title>LBC • VIP QR Panel</title>
+    <script src="https://unpkg.com/qrcode/build/qrcode.min.js"></script>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #12161d;
+        --panel2: #0f1319;
+        --gold1: #f8e49c;
+        --gold2: #f1c74a;
+        --gold3: #b98a28;
+        --text: #e9edf2;
+        --muted: #a8b2bf;
+        --success: #39d98a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.16),
+            transparent 42%
+          ),
+          radial-gradient(
+            1400px 900px at 120% 120%,
+            rgba(185, 138, 40, 0.1),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial;
+        display: grid;
+        place-items: center;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+      .card {
+        width: min(420px, 92vw);
+        border-radius: 20px;
+        padding: 28px;
+        position: relative;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(255, 255, 255, 0.04),
+            rgba(255, 255, 255, 0.015)
+          ),
+          linear-gradient(180deg, var(--panel), var(--panel2));
+        border: 1px solid rgba(248, 228, 156, 0.3);
+        box-shadow:
+          0 28px 60px rgba(0, 0, 0, 0.55),
+          inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          110deg,
+          transparent 0%,
+          rgba(248, 228, 156, 0.12) 12%,
+          transparent 24%
+        );
+        transform: translateX(-120%);
+        animation: shimmer 20s infinite;
+      }
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-120%);
+        }
+        6% {
+          transform: translateX(120%);
+        }
+        100% {
+          transform: translateX(120%);
+        }
+      }
+      .hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+      }
+      .panel-label {
+        font-weight: 900;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        font-size: clamp(12px, 1.8vw, 14px);
+        padding: 6px 10px;
+        border-radius: 999px;
+        color: #111;
+        background: linear-gradient(90deg, var(--gold1), var(--gold2));
+        border: 1px solid rgba(0, 0, 0, 0.25);
+      }
+      .langs {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .langs button {
+        border: 1px solid rgba(248, 228, 156, 0.35);
+        background: rgba(248, 228, 156, 0.1);
+        color: var(--gold1);
+        cursor: pointer;
+        font-weight: 900;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        transition:
+          background 0.3s ease,
+          color 0.3s ease;
+      }
+      .langs button[aria-pressed="true"] {
+        background: linear-gradient(180deg, var(--gold2), var(--gold3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .lang-ind {
+        font-size: 11px;
+        color: var(--muted);
+        margin-left: 6px;
+      }
+      .live-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 900;
+        font-size: 12px;
+        color: #111;
+        background: linear-gradient(180deg, #84f3c0, #39d98a);
+        border: 1px solid rgba(0, 0, 0, 0.25);
+      }
+      .live-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+      }
+      .title {
+        margin: 10px 0 4px;
+        text-align: center;
+        font-size: clamp(22px, 4vw, 34px);
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold1),
+          var(--gold2),
+          var(--gold3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        transition: opacity 0.3s ease;
+      }
+      .subtitle {
+        margin: 0 0 10px;
+        text-align: center;
+        color: var(--muted);
+        font-size: clamp(14px, 2vw, 18px);
+        transition: opacity 0.3s ease;
+      }
+      .current {
+        text-align: center;
+        margin: 0 0 16px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .qr-wrap {
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        border-radius: 18px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.03),
+          rgba(255, 255, 255, 0.01)
+        );
+        border: 1px solid rgba(248, 228, 156, 0.25);
+        box-shadow:
+          inset 0 0 0 1px rgba(0, 0, 0, 0.5),
+          0 0 60px rgba(241, 199, 74, 0.25);
+      }
+      .qr {
+        width: min(250px, 70vw);
+        height: min(250px, 70vw);
+        display: block;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+      }
+      .cta-bar {
+        margin-top: 14px;
+        border-radius: 12px;
+        padding: 10px 14px;
+        text-align: center;
+        font-weight: 900;
+        letter-spacing: 0.4px;
+        color: #111;
+        background: linear-gradient(90deg, var(--gold1), var(--gold2));
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        transition: opacity 0.3s ease;
+      }
+      .note {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <section class="card">
+      <div class="hdr">
+        <span class="panel-label" id="panelLabel">QR CODE PANEL</span>
+        <div class="langs">
+          <button data-lang="en" aria-pressed="true">ENG</button>
+          <button data-lang="es" aria-pressed="false">ESP</button>
+          <button data-lang="fr" aria-pressed="false">FRA</button>
+          <span class="lang-ind" id="langInd">now showing: EN</span>
+        </div>
+      </div>
+      <div class="hdr" style="margin-top: -4px">
+        <span class="live-pill"
+          ><i class="live-dot"></i
+          ><span id="liveText">LIVE SHOW: ACTIVE</span></span
+        >
+      </div>
+
+      <h1 class="title" id="headline">JOIN PRIVATE VIP CLUB</h1>
+      <p class="subtitle" id="subline">Scan QR code to join Private VIP Club</p>
+      <div class="current" id="currentModel">Current Model — Carmen Ruiz</div>
+
+      <div class="qr-wrap">
+        <img id="qr" class="qr" alt="QR code to join VIP" />
+      </div>
+
+      <div class="cta-bar" id="ctaText">
+        Private Access — Your Exclusive Invite Awaits.
+      </div>
+      <p class="note">
+        Source: /data/overlay/vip-exclusive.json • Auto-rotates every 15s
+      </p>
+    </section>
+
+    <script>
+      (function () {
+        const params = new URLSearchParams(location.search);
+        // NEW paths pointing to master-poller outputs
+        const DATA_URL =
+          params.get("json") || "/data/overlay/vip-exclusive.json";
+        const WS_URL =
+          params.get("ws") || "wss://overlays.lbc.domain/ws/events";
+        const ROOM = params.get("room_id") || "demo_room";
+
+        let modelName = "Carmen Ruiz";
+        let vipUrl =
+          "https://latinabeautycollection.com/vip?model=carmen&utm=qr_overlay";
+        let currentData = { alias: "KINGCARLOS", perk: "Priority booking" };
+        const ROTATE_MS = 15000;
+        const langs = ["en", "es", "fr"];
+        let i = 0;
+        let timer = null;
+
+        const L = {
+          en: {
+            panel: "QR CODE PANEL",
+            live: "LIVE SHOW: ACTIVE",
+            title: "JOIN PRIVATE VIP CLUB",
+            sub: "Scan to join Private VIP Club",
+            cta: "Private Access — Your Invite Awaits.",
+            badge: "EN",
+            model: "Current Model — ",
+            perk: "Perk:",
+          },
+          es: {
+            panel: "PANEL DE CÓDIGO QR",
+            live: "SHOW EN VIVO: ACTIVO",
+            title: "ÚNETE AL CLUB VIP PRIVADO",
+            sub: "Escanea el código QR para unirte",
+            cta: "Acceso Privado — Tu invitación te espera.",
+            badge: "ES",
+            model: "Modelo Actual — ",
+            perk: "Beneficio:",
+          },
+          fr: {
+            panel: "PANNEAU DE CODE QR",
+            live: "SPECTACLE EN DIRECT : ACTIF",
+            title: "REJOIGNEZ LE CLUB VIP PRIVÉ",
+            sub: "Scannez le code QR pour rejoindre",
+            cta: "Accès Privé — Votre invitation vous attend.",
+            badge: "FR",
+            model: "Modèle Actuel — ",
+            perk: "Avantage:",
+          },
+        };
+
+        const qr = document.getElementById("qr");
+        const panelLabel = document.getElementById("panelLabel");
+        const liveText = document.getElementById("liveText");
+        const headline = document.getElementById("headline");
+        const subline = document.getElementById("subline");
+        const ctaText = document.getElementById("ctaText");
+        const langBtns = document.querySelectorAll(".langs button");
+        const langInd = document.getElementById("langInd");
+        const currentModelEl = document.getElementById("currentModel");
+
+        function generateQR(url) {
+          if (window.QRCode) {
+            QRCode.toDataURL(url, {
+              width: 400,
+              margin: 1,
+              errorCorrectionLevel: "M",
+            })
+              .then((dataUrl) => {
+                qr.src = dataUrl;
+              })
+              .catch(() => {
+                qr.src = "";
+              });
+          } else {
+            qr.src = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(url)}`;
+          }
+        }
+
+        function apply(code) {
+          const t = L[code] || L.en;
+          panelLabel.textContent = t.panel;
+          liveText.textContent = t.live;
+          headline.textContent = currentData.alias
+            ? `${t.title}: ${currentData.alias.toUpperCase()}`
+            : t.title;
+          subline.textContent = t.sub;
+          ctaText.textContent = `${t.perk} ${currentData.perk}`;
+          langInd.textContent = "now showing: " + t.badge;
+          currentModelEl.textContent = t.model + modelName;
+          langBtns.forEach((b) =>
+            b.setAttribute("aria-pressed", String(b.dataset.lang === code)),
+          );
+        }
+
+        function rotateLoop() {
+          timer = setTimeout(() => {
+            i = (i + 1) % langs.length;
+            apply(langs[i]);
+            rotateLoop();
+          }, ROTATE_MS);
+        }
+
+        function render(data) {
+          if (!data) return;
+          currentData = data;
+          modelName = data.model?.name || modelName;
+          vipUrl = data.qrCodeUrl || vipUrl;
+          generateQR(vipUrl);
+          apply(langs[i]);
+        }
+
+        async function pollData() {
+          try {
+            const res = await fetch(DATA_URL, { cache: "no-cache" });
+            if (res.ok) {
+              const json = await res.json();
+              render(json);
+            }
+          } catch (e) {
+            console.warn("Polling failed, keeping current VIP data.");
+          }
+        }
+
+        langBtns.forEach((b) =>
+          b.addEventListener("click", () => {
+            if (timer) clearTimeout(timer);
+            i = Math.max(0, langs.indexOf(b.dataset.lang));
+            apply(langs[i]);
+            rotateLoop();
+          }),
+        );
+
+        // Initial setup
+        render({
+          alias: "VIP MEMBER",
+          perk: "Priority booking",
+          qrCodeUrl: vipUrl,
+        });
+        pollData();
+        setInterval(pollData, 15000); // Poll every 15s
+        rotateLoop();
+
+        // WebSocket integration for instant updates
+        if (WS_URL) {
+          try {
+            const ws = new WebSocket(WS_URL);
+            ws.onopen = () =>
+              ws.send(JSON.stringify({ type: "subscribe", room_id: ROOM }));
+            ws.onmessage = (evt) => {
+              try {
+                const msg = JSON.parse(evt.data);
+                const payload = msg.event ? msg.event : msg;
+                if (
+                  payload.type === "vip.show" ||
+                  payload.event_type === "vip.show"
+                ) {
+                  if (timer) clearTimeout(timer);
+                  render(payload.data || payload);
+                  rotateLoop();
+                }
+              } catch (e) {}
+            };
+          } catch (e) {}
+        }
+      })();
+    </script>
+  </body>
+</html>

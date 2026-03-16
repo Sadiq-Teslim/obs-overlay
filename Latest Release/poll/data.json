@@ -1,0 +1,58 @@
+{
+  "version": "1.1",
+  "current_poll": {
+    "question": {
+      "en": "Which is your favorite?",
+      "es": "\u00bfCu\u00e1l es tu favorito?",
+      "fr": "Quel est votre pr\u00e9f\u00e9r\u00e9 ?"
+    },
+    "refresh": 10,
+    "options": [
+      {
+        "id": "foot-fetish",
+        "label": {
+          "en": "Foot Fetish",
+          "es": "Fetiche de pies",
+          "fr": "F\u00e9tichisme des pieds"
+        },
+        "value": 28
+      },
+      {
+        "id": "bikini-try-on",
+        "label": {
+          "en": "Bikini Try On",
+          "es": "Prueba de bikini",
+          "fr": "Essayage de bikini"
+        },
+        "value": 22
+      },
+      {
+        "id": "dance-challenge",
+        "label": {
+          "en": "Dance Challenge",
+          "es": "Reto de baile",
+          "fr": "D\u00e9fi danse"
+        },
+        "value": 20
+      },
+      {
+        "id": "lineup-beauty-pick",
+        "label": {
+          "en": "Lineup Beauty Pick",
+          "es": "Elecci\u00f3n de belleza",
+          "fr": "Choix beaut\u00e9"
+        },
+        "value": 18
+      },
+      {
+        "id": "cos-play",
+        "label": {
+          "en": "COS Play",
+          "es": "COS Play",
+          "fr": "COS Play"
+        },
+        "value": 12
+      }
+    ]
+  }
+}

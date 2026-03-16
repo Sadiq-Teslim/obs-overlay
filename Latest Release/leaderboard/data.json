@@ -1,0 +1,63 @@
+{
+  "type": "replace_all",
+  "generated_at": "2025-10-04T18:05:00Z",
+  "season_label": "This Week",
+  "currency": "USD",
+  "supporters": [
+    {
+      "id": "usr_8a3f1",
+      "name": "ElReyAzul",
+      "country": "DO",
+      "avatar_url": null,
+      "amount": 1250,
+      "currency": "USD",
+      "badges": [
+        "diamond"
+      ]
+    },
+    {
+      "id": "usr_f11c9",
+      "name": "SirGold",
+      "country": "US",
+      "avatar_url": "https://cdn.example.com/avatars/sirgold.png",
+      "amount": 740,
+      "currency": "USD",
+      "badges": [
+        "flame"
+      ]
+    },
+    {
+      "id": "usr_mx9aa",
+      "name": "AnónimoVIP",
+      "country": "MX",
+      "avatar_url": null,
+      "amount": 520,
+      "currency": "USD",
+      "badges": [
+        "flame"
+      ]
+    },
+    {
+      "id": "usr_ar5zz",
+      "name": "Luna",
+      "country": "AR",
+      "avatar_url": null,
+      "amount": 280,
+      "currency": "USD",
+      "badges": [
+        "star"
+      ]
+    },
+    {
+      "id": "usr_br1qq",
+      "name": "ShadowCat",
+      "country": "BR",
+      "avatar_url": null,
+      "amount": 130,
+      "currency": "USD",
+      "badges": [
+        "star"
+      ]
+    }
+  ]
+}

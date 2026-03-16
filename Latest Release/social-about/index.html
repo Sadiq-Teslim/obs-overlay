@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LBC • Social About</title>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #2a2e36;
+        --panel-2: #20242b;
+        --text: #e9edf2;
+        --muted: #a7b0bc;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --success: #39d98a;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.15),
+            transparent 40%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(185, 138, 40, 0.1),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans;
+        letter-spacing: 0.2px;
+        overflow-x: hidden;
+      }
+      #safe-area {
+        padding: clamp(16px, 2vw, 24px);
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }
+      .panel {
+        width: min(800px, 92vw);
+        margin: auto;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+      .panel__header,
+      .panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.15)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .panel__footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: none;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.4vw, 28px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .content {
+        padding: 22px;
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 24px;
+        align-items: center;
+      }
+      @media (max-width: 600px) {
+        .content {
+          grid-template-columns: 1fr;
+          text-align: center;
+        }
+      }
+
+      .avatar {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: #111;
+        border: 3px solid var(--gold-2);
+        box-shadow: 0 0 20px rgba(241, 199, 74, 0.3);
+        overflow: hidden;
+        margin: auto;
+      }
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .info h2 {
+        margin: 0 0 8px 0;
+        font-size: 28px;
+      }
+      .info p {
+        margin: 0 0 16px 0;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .social-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+      .social-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-weight: 800;
+        font-size: 14px;
+      }
+      .social-card span {
+        color: var(--gold-1);
+      }
+
+      .schedule-box {
+        margin-top: 20px;
+        padding: 14px;
+        background: rgba(57, 217, 138, 0.1);
+        border: 1px solid rgba(57, 217, 138, 0.3);
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .schedule-box strong {
+        color: var(--success);
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="safe-area">
+      <section class="panel">
+        <header class="panel__header">
+          <h1 id="title">About Me</h1>
+        </header>
+
+        <div class="content">
+          <div class="avatar">
+            <img
+              id="profileImg"
+              src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMzMzMiLz48L3N2Zz4="
+              alt="Profile"
+            />
+          </div>
+          <div class="info">
+            <h2 id="modelName">Carmen Ruiz</h2>
+            <p id="bioText">
+              Latina beauty • Dancing, chatting, and having fun! Let's get to
+              know each other.
+            </p>
+
+            <div class="social-grid" id="socialGrid">
+              <!-- JS Injected -->
+            </div>
+
+            <div class="schedule-box">
+              <span id="schedLabel">Next Broadcast:</span>
+              <strong id="schedTime">Mon, Wed, Fri @ 9PM EST</strong>
+            </div>
+          </div>
+        </div>
+
+        <footer class="panel__footer">
+          <div class="small" id="footnote">
+            Source: <strong>/data/overlay/social-about.json</strong>
+          </div>
+        </footer>
+      </section>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(location.search);
+      const JSON_URL = params.get("json") || "/data/overlay/social-about.json";
+
+      const DEMO = {
+        name: "Carmen Ruiz",
+        avatar_url: "", // Leave empty to use fallback
+        bio: {
+          en: "Latina beauty • Dancing, chatting, and having fun! Let's get to know each other.",
+          es: "Belleza latina • ¡Bailando, charlando y divirtiéndonos! Vamos a conocernos.",
+          fr: "Beauté latina • Danse, discussion et plaisir ! Faisons connaissance.",
+        },
+        socials: [
+          { platform: "Twitter", handle: "@CarmenR_LBC" },
+          { platform: "Instagram", handle: "@carmen.ruiz.ofc" },
+          { platform: "OnlyFans", handle: "carmen_vip" },
+        ],
+        schedule: {
+          en: "Mon, Wed, Fri @ 9PM EST",
+          es: "Lun, Mié, Vie @ 9PM EST",
+          fr: "Lun, Mer, Ven @ 21h EST",
+        },
+      };
+
+      let CFG = DEMO;
+      let LANG = "en";
+
+      function tr(v) {
+        return v && typeof v === "object"
+          ? v[LANG] || v.en || v.es || v.fr || Object.values(v)[0]
+          : v;
+      }
+
+      function render() {
+        if (!CFG) CFG = DEMO;
+        document.getElementById("modelName").textContent =
+          CFG.name || "Model Name";
+        if (CFG.avatar_url)
+          document.getElementById("profileImg").src = CFG.avatar_url;
+        document.getElementById("bioText").textContent = tr(CFG.bio);
+        document.getElementById("schedTime").textContent = tr(CFG.schedule);
+
+        const grid = document.getElementById("socialGrid");
+        grid.innerHTML = "";
+        (CFG.socials || []).forEach((s) => {
+          const div = document.createElement("div");
+          div.className = "social-card";
+          div.innerHTML = `<span>${s.platform}:</span> ${s.handle}`;
+          grid.appendChild(div);
+        });
+      }
+
+      setInterval(() => {
+        const langs = ["en", "es", "fr"];
+        LANG = langs[(langs.indexOf(LANG) + 1) % 3];
+
+        // Update static UI translations based on lang
+        const titles = {
+          en: "About Me",
+          es: "Sobre Mí",
+          fr: "À Propos de Moi",
+        };
+        const scheds = {
+          en: "Next Broadcast:",
+          es: "Próxima Transmisión:",
+          fr: "Prochaine Diffusion :",
+        };
+        document.getElementById("title").textContent = titles[LANG];
+        document.getElementById("schedLabel").textContent = scheds[LANG];
+
+        render();
+      }, 15000); // Rotate language and re-render every 15s
+
+      async function pollData() {
+        try {
+          const res = await fetch(JSON_URL, { cache: "no-cache" });
+          if (res.ok) {
+            CFG = await res.json();
+            render();
+          }
+        } catch (e) {}
+      }
+
+      pollData();
+      setInterval(pollData, 60000); // Info changes rarely, poll every 60s
+    </script>
+  </body>
+</html>

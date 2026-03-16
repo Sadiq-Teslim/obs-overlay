@@ -1,0 +1,850 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LBC • Spin to Win</title>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #2a2e36;
+        --panel-2: #20242b;
+        --text: #e9edf2;
+        --muted: #a7b0bc;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --accent: #7ec8ff;
+        --success: #39d98a;
+        --danger: #ff6b6b;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.25),
+            transparent 40%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(185, 138, 40, 0.2),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans;
+        letter-spacing: 0.2px;
+        overflow-x: hidden;
+      }
+      #safe-area {
+        padding: clamp(16px, 2vw, 24px);
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }
+      .panel {
+        width: min(1200px, 94vw);
+        margin: auto;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          90deg,
+          rgba(241, 199, 74, 0.35),
+          rgba(248, 228, 156, 0) 25%,
+          rgba(241, 199, 74, 0.35) 50%,
+          rgba(248, 228, 156, 0) 75%,
+          rgba(241, 199, 74, 0.35) 100%
+        );
+        opacity: 0.08;
+      }
+      .panel__header,
+      .panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.15)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .panel__footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: none;
+      }
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.4vw, 28px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 2px 8px rgba(241, 199, 74, 0.18));
+      }
+      .pulse-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+      .header__right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .lang-toggle {
+        display: flex;
+        gap: 6px;
+      }
+      .lang-toggle button {
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        background: rgba(241, 199, 74, 0.1);
+        color: var(--gold-1);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .lang-toggle button[aria-pressed="true"] {
+        background: linear-gradient(180deg, var(--gold-2), var(--gold-3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 320px 1fr 280px;
+        gap: 18px;
+        padding: 18px 22px;
+      }
+      @media (max-width: 980px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card {
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 14px;
+      }
+      .card h2 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+        color: var(--gold-1);
+        letter-spacing: 0.5px;
+      }
+      .meta {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .winners {
+        list-style: none;
+        padding: 0;
+        margin: 8px 0 0 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .winners li {
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        padding: 8px 10px;
+      }
+      .badge {
+        font-size: 11px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #fff, #d7d7d7);
+        color: #111;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        font-weight: 800;
+      }
+      .badge--ok {
+        background: linear-gradient(180deg, #d8ffe9, #a5f1c7);
+      }
+      .badge--warn {
+        background: linear-gradient(180deg, #ffeede, #ffd1ae);
+      }
+      .wheel-wrap {
+        position: relative;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 20px;
+        min-height: 420px;
+      }
+      #wheelCanvas {
+        width: min(540px, 80vw);
+        height: min(540px, 80vw);
+        max-width: 540px;
+        max-height: 540px;
+      }
+      .pointer {
+        position: absolute;
+        top: 12px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 14px solid transparent;
+        border-right: 14px solid transparent;
+        border-top: 22px solid var(--gold-2);
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+      }
+      .spin-btn {
+        position: absolute;
+        inset: auto;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 16px;
+        border-radius: 999px;
+        font-weight: 900;
+        letter-spacing: 0.5px;
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        background: rgba(241, 199, 74, 0.1);
+        color: var(--gold-1);
+        cursor: pointer;
+      }
+      .spin-btn[disabled] {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .metric {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 10px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.04);
+        margin-top: 8px;
+      }
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .footer-note {
+        font-size: 12px;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="safe-area">
+      <section class="panel">
+        <header class="panel__header">
+          <div class="header__left">
+            <span aria-hidden="true">
+              <svg
+                viewBox="0 0 64 64"
+                width="28"
+                height="28"
+                role="img"
+                aria-label="Wheel"
+              >
+                <defs>
+                  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f8e49c" />
+                    <stop offset="50%" stop-color="#f1c74a" />
+                    <stop offset="100%" stop-color="#b98a28" />
+                  </linearGradient>
+                </defs>
+                <circle
+                  cx="32"
+                  cy="32"
+                  r="28"
+                  fill="url(#gold)"
+                  opacity=".85"
+                />
+              </svg>
+            </span>
+            <h1 id="title">Spin to Win</h1>
+            <span
+              class="pulse-dot"
+              title="Live"
+              style="margin-left: 8px"
+            ></span>
+          </div>
+          <div class="header__right">
+            <div class="status" id="status">
+              <span>Status: </span><strong>Live</strong>
+            </div>
+            <div class="lang-toggle" role="group" aria-label="Language">
+              <button data-lang="en" aria-pressed="true">ENG</button>
+              <button data-lang="es" aria-pressed="false">ESP</button>
+              <button data-lang="fr" aria-pressed="false">FRA</button>
+            </div>
+          </div>
+        </header>
+        <div class="grid">
+          <aside class="card">
+            <h2 id="ui_subtitle">Tap to spin when eligible</h2>
+            <div class="meta" id="eligibilityHint">
+              Rule: $50 tip = 1 spin • Cooldown 3s global / 15s per user
+            </div>
+            <div class="metric">
+              <span id="fairnessLabel">Fairness</span
+              ><span id="fairBadge" class="badge badge--warn">UNVERIFIED</span>
+            </div>
+            <h2 id="recentWinnersHeader" style="margin-top: 14px">
+              Recent winners
+            </h2>
+            <ol id="winners" class="winners" aria-live="polite"></ol>
+          </aside>
+          <main class="wheel-wrap">
+            <canvas
+              id="wheelCanvas"
+              width="540"
+              height="540"
+              aria-label="Prize wheel"
+            ></canvas>
+            <div class="pointer" aria-hidden="true"></div>
+            <button id="spinBtn" class="spin-btn">SPIN</button>
+          </main>
+          <aside class="card">
+            <h2 id="sessionHeader">Session</h2>
+            <div class="metric">
+              <span id="spinsTodayLabel">Spins today</span
+              ><strong id="spinsToday">0</strong>
+            </div>
+            <div class="metric">
+              <span id="winsTodayLabel">Wins today</span
+              ><strong id="winsToday">0</strong>
+            </div>
+            <div class="metric">
+              <span id="biggestPrizeLabel">Biggest prize</span
+              ><strong id="biggestPrize">—</strong>
+            </div>
+            <h2 id="topFanHeader" style="margin-top: 14px">Top Fan</h2>
+            <div class="metric">
+              <span id="topFanLabel"> — </span
+              ><strong id="topFanScore">—</strong>
+            </div>
+            <div class="small" style="margin-top: 10px" id="footnote">
+              Source: <strong>wheel.json</strong> • WS optional
+            </div>
+          </aside>
+        </div>
+        <footer class="panel__footer">
+          <div class="footer-note" id="ticker">Waiting for first spin...</div>
+          <div class="small" id="clock"></div>
+        </footer>
+      </section>
+    </div>
+    <script>
+      const params = new URLSearchParams(location.search);
+      const WHEEL_URL = params.get("wheel") || "../data/wheel.json";
+      const LANG_SPEC = (params.get("lang") || "rotate:en,es,fr").toLowerCase();
+      const LANG_INTERVAL = Math.max(
+        5,
+        parseInt(params.get("lang_interval") || "15", 10),
+      );
+
+      const UI = {
+        en: {
+          title: "Spin to Win",
+          subtitle: "Tap to spin when eligible",
+          status: "Status: ",
+          live: "Live",
+          fairness: "Fairness",
+          recentWinners: "Recent Winners",
+          session: "Session",
+          spinsToday: "Spins today",
+          winsToday: "Wins today",
+          biggestPrize: "Biggest prize",
+          topFan: "Top Fan",
+          spinBtn: "SPIN",
+          ticker: (name, prize) => `${name} won “${prize}”`,
+          rule_tip: (n) => `Rule: $${n} tip = 1 spin`,
+          cooldown: (g, u) => ` • Cooldown ${g}s global / ${u}s per user`,
+        },
+        es: {
+          title: "Gira y Gana",
+          subtitle: "Toca para girar cuando seas elegible",
+          status: "Estado: ",
+          live: "En vivo",
+          fairness: "Justicia",
+          recentWinners: "Ganadores Recientes",
+          session: "Sesión",
+          spinsToday: "Giros de hoy",
+          winsToday: "Victorias de hoy",
+          biggestPrize: "Premio más grande",
+          topFan: "Mejor Fan",
+          spinBtn: "GIRAR",
+          ticker: (name, prize) => `${name} ganó “${prize}”`,
+          rule_tip: (n) => `Regla: propina de $${n} = 1 giro`,
+          cooldown: (g, u) =>
+            ` • Enfriamiento ${g}s global / ${u}s por usuario`,
+        },
+        fr: {
+          title: "Tourne et Gagne",
+          subtitle: "Touchez pour tourner si éligible",
+          status: "Statut : ",
+          live: "En direct",
+          fairness: "Équité",
+          recentWinners: "Gagnants Récents",
+          session: "Session",
+          spinsToday: "Tours du jour",
+          winsToday: "Victoires du jour",
+          biggestPrize: "Plus gros lot",
+          topFan: "Top Fan",
+          spinBtn: "TOURNER",
+          ticker: (name, prize) => `${name} a gagné « ${prize} »`,
+          rule_tip: (n) => `Règle : pourboire ${n}$ = 1 tour`,
+          cooldown: (g, u) => ` • Repos ${g}s global / ${u}s par utilisateur`,
+        },
+      };
+
+      let LANGS = ["en", "es", "fr"],
+        ROTATE = null,
+        LANG = initLang(LANG_SPEC),
+        _langTimer = null;
+      function initLang(spec) {
+        if (spec.startsWith("rotate:")) {
+          ROTATE = spec.replace("rotate:", "").split(",");
+          return ROTATE[0] || "en";
+        }
+        if (spec === "auto") {
+          const n = (navigator.language || "en").slice(0, 2);
+          return LANGS.includes(n) ? n : "en";
+        }
+        return LANGS.includes(spec) ? spec : "en";
+      }
+      function startRotate() {
+        if (!ROTATE) return;
+        let i = ROTATE.indexOf(LANG);
+        i = i < 0 ? 0 : i;
+        clearInterval(_langTimer);
+        _langTimer = setInterval(() => {
+          i = (i + 1) % ROTATE.length;
+          setLang(ROTATE[i]);
+        }, LANG_INTERVAL * 1000);
+      }
+      function setLang(code) {
+        LANG = LANGS.includes(code) ? code : "en";
+        document
+          .querySelectorAll(".lang-toggle button")
+          .forEach((b) =>
+            b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)),
+          );
+        applyChrome();
+        drawWheel();
+      }
+      document.querySelectorAll(".lang-toggle button").forEach((b) =>
+        b.addEventListener("click", () => {
+          clearInterval(_langTimer);
+          setLang(b.dataset.lang);
+        }),
+      );
+
+      const DEMO = {
+        version: "1.0",
+        eligibility: {
+          rule: "tip_threshold",
+          threshold_usd: 50,
+          cooldown_global_sec: 3,
+          cooldown_user_sec: 15,
+        },
+        wedges: [
+          {
+            id: "telegram",
+            label: {
+              en: "Telegram Subscription",
+              es: "Suscripción a Telegram",
+              fr: "Abonnement Telegram",
+            },
+            weight: 1.5,
+            style: { color: "#f8e49c" },
+          },
+          {
+            id: "tease",
+            label: { en: "Tease Show", es: "Show de Tienta", fr: "Show Tease" },
+            weight: 1.2,
+            style: { color: "#ffd166" },
+          },
+          {
+            id: "callout",
+            label: {
+              en: "Name Callout",
+              es: "Mención de Nombre",
+              fr: "Annonce du Nom",
+            },
+            weight: 1.8,
+            style: { color: "#8dc7ff" },
+          },
+          {
+            id: "vip10",
+            label: {
+              en: "10-min Private VIP Show",
+              es: "Privado VIP 10 min",
+              fr: "VIP privé 10 min",
+            },
+            weight: 0.8,
+            style: { color: "#ff6b6b" },
+          },
+          {
+            id: "kiss",
+            label: {
+              en: "Virtual Kiss",
+              es: "Beso Virtual",
+              fr: "Baiser Virtuel",
+            },
+            weight: 1.7,
+            style: { color: "#9ee493" },
+          },
+          {
+            id: "ama",
+            label: {
+              en: "Ask Me Any Question",
+              es: "Pregúntame lo que sea",
+              fr: "Pose-moi n’importe quelle question",
+            },
+            weight: 1.3,
+            style: { color: "#c9b8ff" },
+          },
+          {
+            id: "dress",
+            label: {
+              en: "Pick My Next Dress",
+              es: "Elige mi próximo vestido",
+              fr: "Choisis ma prochaine robe",
+            },
+            weight: 1.5,
+            style: { color: "#7ec8ff" },
+          },
+          {
+            id: "nails",
+            label: {
+              en: "Pick My Next Nail Color",
+              es: "Elige mi próximo color de uñas",
+              fr: "Choisis ma prochaine couleur d’ongles",
+            },
+            weight: 1.2,
+            style: { color: "#ffa8e2" },
+          },
+        ],
+        ui: { recent_winners_max: 3 },
+      };
+      let CFG = DEMO;
+      const canvas = document.getElementById("wheelCanvas");
+      const ctx = canvas.getContext("2d", { alpha: true });
+      let angleBase = 0,
+        anim = null;
+
+      function tr(v) {
+        return v && typeof v === "object"
+          ? v[LANG] || v.en || v.es || v.fr || Object.values(v)[0]
+          : v;
+      }
+      function drawWheel() {
+        const W = canvas.width,
+          H = canvas.height,
+          R = Math.min(W, H) / 2 - 6;
+        ctx.clearRect(0, 0, W, H);
+        ctx.save();
+        ctx.translate(W / 2, H / 2);
+        ctx.rotate((angleBase * Math.PI) / 180);
+        const n = CFG.wedges.length,
+          step = (2 * Math.PI) / n;
+        for (let i = 0; i < n; i++) {
+          const w = CFG.wedges[i],
+            a0 = i * step,
+            a1 = (i + 1) * step;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.arc(0, 0, R, a0, a1, false);
+          ctx.closePath();
+          ctx.fillStyle = (w.style && w.style.color) || "#444";
+          ctx.fill();
+          ctx.strokeStyle = "rgba(0,0,0,.35)";
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.save();
+          const mid = a0 + (a1 - a0) / 2;
+          ctx.rotate(mid);
+          ctx.translate(R * 0.68, 0);
+          ctx.rotate(Math.PI / 2);
+          ctx.fillStyle = "#0d0f12";
+          ctx.font = "bold 14px ui-sans-serif,system-ui,-apple-system";
+          ctx.textAlign = "center";
+          wrapText(ctx, tr(w.label), 0, 0, R * 0.55, 16);
+          ctx.restore();
+        }
+        ctx.beginPath();
+        ctx.arc(0, 0, R * 0.18, 0, 2 * Math.PI);
+        ctx.fillStyle = "#111";
+        ctx.fill();
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "rgba(255,255,255,.2)";
+        ctx.stroke();
+        ctx.restore();
+      }
+      function wrapText(c, text, x, y, maxWidth, lh) {
+        const words = String(text).split(" ");
+        let line = "",
+          yy = y;
+        for (let n = 0; n < words.length; n++) {
+          const test = line + words[n] + " ";
+          if (c.measureText(test).width > maxWidth && n > 0) {
+            c.fillText(line, x, yy);
+            line = words[n] + " ";
+            yy += lh;
+          } else line = test;
+        }
+        c.fillText(line, x, yy);
+      }
+
+      let spinsCount = 0;
+      const spinBtn = document.getElementById("spinBtn");
+      spinBtn.addEventListener("click", () => {
+        if (anim) cancelAnimationFrame(anim);
+        spinsCount++;
+        document.getElementById("spinsToday").textContent = String(spinsCount);
+        const start = performance.now(),
+          from = angleBase,
+          baseTurns = 8 * 360,
+          to = from + baseTurns + 180;
+        (function frame(t) {
+          const p = Math.min(1, (t - start) / 4000);
+          const eased =
+            p < 0.6
+              ? (1 - Math.pow(1 - p / 0.6, 3)) * 0.8
+              : 0.8 +
+                ((p - 0.6) / 0.4) *
+                  (1 - (1 - Math.pow(1 - (p - 0.6) / 0.4, 2)) / 2) *
+                  0.2;
+          angleBase = from + eased * (to - from);
+          drawWheel();
+          if (p < 1) anim = requestAnimationFrame(frame);
+        })(start);
+        setTimeout(() => {
+          const w = pickWeighted(CFG.wedges);
+          const final = computeAngleForWedge(w.id, true);
+          smoothTo(final, 1200, () => announceWin("DemoUser", w.id));
+        }, 600);
+      });
+      function smoothTo(target, D, cb) {
+        const start = performance.now(),
+          from = angleBase;
+        if (anim) cancelAnimationFrame(anim);
+        (function f(t) {
+          const p = Math.min(1, (t - start) / D);
+          const eased = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+          angleBase = from + eased * (target - from);
+          drawWheel();
+          if (p < 1) anim = requestAnimationFrame(f);
+          else cb && cb();
+        })(start);
+      }
+      function pickWeighted(arr) {
+        const total =
+          arr.reduce((a, b) => a + (+b.weight || 0), 0) || arr.length;
+        let r = Math.random() * total;
+        for (const it of arr) {
+          r -= +it.weight || 1;
+          if (r <= 0) return it;
+        }
+        return arr[arr.length - 1];
+      }
+      function computeAngleForWedge(id, addTurns) {
+        const n = CFG.wedges.length,
+          idx = Math.max(
+            0,
+            CFG.wedges.findIndex((w) => w.id === id),
+          );
+        const slice = 360 / n,
+          center = idx * slice + slice / 2;
+        let target =
+          angleBase + (addTurns ? 8 * 360 : 0) + (360 - (center % 360));
+        return target + 0.001;
+      }
+
+      function announceWin(name, wedgeId) {
+        const w = CFG.wedges.find((x) => x.id === wedgeId);
+        const label = w ? tr(w.label) : wedgeId;
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${name}</span><span>${label}</span>`;
+        const winners = document.getElementById("winners");
+        winners.prepend(li);
+        while (winners.children.length > (CFG.ui?.recent_winners_max || 3))
+          winners.removeChild(winners.lastChild);
+        document.getElementById("ticker").textContent = UI[LANG].ticker(
+          name,
+          label,
+        );
+        const winsEl = document.getElementById("winsToday");
+        winsEl.textContent = String((+winsEl.textContent || 0) + 1);
+      }
+
+      async function loadWheel() {
+        if (!WHEEL_URL) {
+          applyChrome();
+          drawWheel();
+          startRotate();
+          return;
+        }
+        try {
+          const res = await fetch(WHEEL_URL, { cache: "no-cache" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          CFG = await res.json();
+        } catch (e) {
+          console.warn("wheel.json load failed, using demo:", e.message);
+          CFG = DEMO;
+        }
+        applyChrome();
+        drawWheel();
+        startRotate();
+      }
+
+      function applyChrome() {
+        const t = UI[LANG] || UI.en;
+        document.getElementById("title").textContent = t.title;
+        document.getElementById("ui_subtitle").textContent = t.subtitle;
+        const status = document.getElementById("status");
+        status.querySelector("span").textContent = t.status;
+        status.querySelector("strong").textContent = t.live;
+        const e = CFG.eligibility || {
+          threshold_usd: 50,
+          cooldown_global_sec: 3,
+          cooldown_user_sec: 15,
+        };
+        document.getElementById("eligibilityHint").textContent =
+          t.rule_tip(e.threshold_usd) +
+          t.cooldown(e.cooldown_global_sec, e.cooldown_user_sec);
+        document.getElementById("recentWinnersHeader").textContent =
+          t.recentWinners;
+        document.getElementById("sessionHeader").textContent = t.session;
+        document.getElementById("spinsTodayLabel").textContent = t.spinsToday;
+        document.getElementById("winsTodayLabel").textContent = t.winsToday;
+        document.getElementById("biggestPrizeLabel").textContent =
+          t.biggestPrize;
+        document.getElementById("topFanHeader").textContent = t.topFan;
+        document.getElementById("spinBtn").textContent = t.spinBtn;
+        document.getElementById("fairnessLabel").textContent = t.fairness;
+      }
+
+      setInterval(() => {
+        document.getElementById("clock").textContent =
+          new Date().toLocaleTimeString();
+      }, 1000);
+
+      loadWheel();
+
+      window.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "spin.trigger") {
+          console.log(
+            "[Test Panel] Received spin trigger:",
+            event.data.winnerIndex,
+          );
+          if (CFG.wedges && CFG.wedges[event.data.winnerIndex]) {
+            const wedgeId = CFG.wedges[event.data.winnerIndex].id;
+            if (anim) cancelAnimationFrame(anim);
+            spinsCount++;
+            document.getElementById("spinsToday").textContent =
+              String(spinsCount);
+            const start = performance.now(),
+              from = angleBase,
+              baseTurns = 8 * 360,
+              to = from + baseTurns + 180;
+            (function frame(t) {
+              const p = Math.min(1, (t - start) / 4000);
+              const eased =
+                p < 0.6
+                  ? (1 - Math.pow(1 - p / 0.6, 3)) * 0.8
+                  : 0.8 +
+                    ((p - 0.6) / 0.4) *
+                      (1 - (1 - Math.pow(1 - (p - 0.6) / 0.4, 2)) / 2) *
+                      0.2;
+              angleBase = from + eased * (to - from);
+              drawWheel();
+              if (p < 1) anim = requestAnimationFrame(frame);
+            })(start);
+            setTimeout(() => {
+              const final = computeAngleForWedge(wedgeId, true);
+              smoothTo(final, 1200, () => announceWin("QA_User", wedgeId));
+            }, 600);
+          }
+        }
+        if (event.data && event.data.type === "latency_ping") {
+          window.parent.postMessage(
+            { type: "latency_pong", start: event.data.start },
+            "*",
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

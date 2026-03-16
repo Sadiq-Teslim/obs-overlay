@@ -1,0 +1,12 @@
+{
+  "currency": "USD",
+  "goal": 150,
+  "duration_sec": 180,
+  "max_round_resets": 3,
+  "model": { "name": "Carmen Ruiz" },
+  "messages": {
+    "en": "Tip $150 before time ends to unlock the surprise show!",
+    "es": "¡Dona $150 antes de que termine el tiempo para desbloquear el show!",
+    "fr": "Contribuez 150 $ avant la fin pour débloquer le show !"
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "model": "Carmen Ruiz",
+  "languages": [
+    "en",
+    "es",
+    "fr"
+  ],
+  "itemsOrder": [
+    "foot_fetish",
+    "shower_scene",
+    "sensual_stripping",
+    "shoutout",
+    "dirty_talk"
+  ],
+  "i18n": {
+    "en": {
+      "title": "Tip Menu",
+      "services": "Services",
+      "active": "Active",
+      "top3": "Top Items This Session",
+      "top3Note": "Updates in real time as tips come in.",
+      "bundle": "Bundle suggestion: Combine Shower Scene + Sensual Stripping for a premium experience.",
+      "badges": {
+        "goal": "GOAL",
+        "hot": "HOT",
+        "unlocked": "UNLOCKED"
+      },
+      "items": {
+        "foot_fetish": {
+          "name": "Foot Fetish",
+          "desc": "Focused foot play",
+          "price": 75,
+          "goal": 750
+        },
+        "shower_scene": {
+          "name": "Shower Scene",
+          "desc": "Wet & wild shower show",
+          "price": 200,
+          "goal": 1000
+        },
+        "sensual_stripping": {
+          "name": "Sensual Stripping",
+          "desc": "Slow tease performance",
+          "price": 200
+        },
+        "shoutout": {
+          "name": "ShoutOut",
+          "desc": "Personal name call on stream",
+          "price": 5
+        },
+        "dirty_talk": {
+          "name": "Dirty Talk",
+          "desc": "Spicy roleplay",
+          "price": 50,
+          "goal": 500
+        }
+      }
+    },
+    "es": {
+      "title": "Men\u00fa de Propinas",
+      "services": "Servicios",
+      "active": "En vivo",
+      "top3": "Top \u00cdtems de la Sesi\u00f3n",
+      "top3Note": "Se actualiza en tiempo real.",
+      "bundle": "Sugerencia: Ducha + Striptease para una experiencia premium.",
+      "badges": {
+        "goal": "META",
+        "hot": "TENDENCIA",
+        "unlocked": "DESBLOQUEADO"
+      },
+      "items": {
+        "foot_fetish": {
+          "name": "Fetiche de Pies",
+          "desc": "Enfoque total en pies",
+          "price": 75,
+          "goal": 750
+        },
+        "shower_scene": {
+          "name": "Escena de Ducha",
+          "desc": "Show en la ducha",
+          "price": 200,
+          "goal": 1000
+        },
+        "sensual_stripping": {
+          "name": "Striptease Sensual",
+          "desc": "Desnudo sensual",
+          "price": 200
+        },
+        "shoutout": {
+          "name": "Menci\u00f3n",
+          "desc": "Saludo personalizado en vivo",
+          "price": 5
+        },
+        "dirty_talk": {
+          "name": "Charla Sucia",
+          "desc": "Juego de roles picante",
+          "price": 50,
+          "goal": 500
+        }
+      }
+    },
+    "fr": {
+      "title": "Menu des Pourboires",
+      "services": "Prestations",
+      "active": "En direct",
+      "top3": "Top de la Session",
+      "top3Note": "Mises \u00e0 jour en temps r\u00e9el.",
+      "bundle": "Suggestion : Douche + Effeuillage pour une exp\u00e9rience premium.",
+      "badges": {
+        "goal": "OBJECTIF",
+        "hot": "CHAUD",
+        "unlocked": "D\u00c9VERROUILL\u00c9"
+      },
+      "items": {
+        "foot_fetish": {
+          "name": "F\u00e9tichisme des Pieds",
+          "desc": "Focus pieds",
+          "price": 75,
+          "goal": 750
+        },
+        "shower_scene": {
+          "name": "Sc\u00e8ne Douche",
+          "desc": "Show sous la douche",
+          "price": 200,
+          "goal": 1000
+        },
+        "sensual_stripping": {
+          "name": "Effeuillage Sensuel",
+          "desc": "Tease lent",
+          "price": 200
+        },
+        "shoutout": {
+          "name": "ShoutOut",
+          "desc": "Appel du nom en direct",
+          "price": 5
+        },
+        "dirty_talk": {
+          "name": "Paroles Cochones",
+          "desc": "Jeu de r\u00f4le \u00e9pic\u00e9",
+          "price": 50,
+          "goal": 500
+        }
+      }
+    }
+  }
+}

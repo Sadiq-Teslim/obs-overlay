@@ -1,0 +1,115 @@
+{
+  "version": "1.0",
+  "title": {
+    "en": "Spin to Win",
+    "es": "Gira y Gana",
+    "fr": "Tourne et Gagne"
+  },
+  "eligibility": {
+    "rule": "tip_threshold",
+    "threshold_usd": 50,
+    "cooldown_global_sec": 3,
+    "cooldown_user_sec": 15
+  },
+  "wedges": [
+    {
+      "id": "telegram",
+      "label": {
+        "en": "Telegram Subscription",
+        "es": "Suscripción a Telegram",
+        "fr": "Abonnement Telegram"
+      },
+      "weight": 1.5,
+      "style": {
+        "color": "#f8e49c"
+      }
+    },
+    {
+      "id": "tease",
+      "label": {
+        "en": "Tease Show",
+        "es": "Show de Tienta",
+        "fr": "Show Tease"
+      },
+      "weight": 1.2,
+      "style": {
+        "color": "#ffd166"
+      }
+    },
+    {
+      "id": "callout",
+      "label": {
+        "en": "Name Callout",
+        "es": "Mención de Nombre",
+        "fr": "Annonce du Nom"
+      },
+      "weight": 1.8,
+      "style": {
+        "color": "#8dc7ff"
+      }
+    },
+    {
+      "id": "vip10",
+      "label": {
+        "en": "10-min Private VIP Show",
+        "es": "Privado VIP 10 min",
+        "fr": "VIP privé 10 min"
+      },
+      "weight": 0.8,
+      "style": {
+        "color": "#ff6b6b"
+      }
+    },
+    {
+      "id": "kiss",
+      "label": {
+        "en": "Virtual Kiss",
+        "es": "Beso Virtual",
+        "fr": "Baiser Virtuel"
+      },
+      "weight": 1.7,
+      "style": {
+        "color": "#9ee493"
+      }
+    },
+    {
+      "id": "ama",
+      "label": {
+        "en": "Ask Me Any Question",
+        "es": "Pregúntame lo que sea",
+        "fr": "Pose-moi n’importe quelle question"
+      },
+      "weight": 1.3,
+      "style": {
+        "color": "#c9b8ff"
+      }
+    },
+    {
+      "id": "dress",
+      "label": {
+        "en": "Pick My Next Dress",
+        "es": "Elige mi próximo vestido",
+        "fr": "Choisis ma prochaine robe"
+      },
+      "weight": 1.5,
+      "style": {
+        "color": "#7ec8ff"
+      }
+    },
+    {
+      "id": "nails",
+      "label": {
+        "en": "Pick My Next Nail Color",
+        "es": "Elige mi próximo color de uñas",
+        "fr": "Choisis ma prochaine couleur d’ongles"
+      },
+      "weight": 1.2,
+      "style": {
+        "color": "#ffa8e2"
+      }
+    }
+  ],
+  "ui": {
+    "recent_winners_max": 3
+  }
+}

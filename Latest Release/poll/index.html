@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LBC • Fan Poll</title>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #2a2e36;
+        --panel-2: #20242b;
+        --text: #e9edf2;
+        --muted: #a7b0bc;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --success: #39d98a;
+        --accent: #7ec8ff;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.25),
+            transparent 40%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(185, 138, 40, 0.2),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans;
+        letter-spacing: 0.2px;
+      }
+
+      #safe-area {
+        padding: 24px;
+      }
+
+      .panel {
+        width: min(980px, 92vw);
+        margin: auto;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .panel::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          90deg,
+          rgba(241, 199, 74, 0.35),
+          rgba(248, 228, 156, 0) 25%,
+          rgba(241, 199, 74, 0.35) 50%,
+          rgba(248, 228, 156, 0) 75%,
+          rgba(241, 199, 74, 0.35) 100%
+        );
+        opacity: 0.08;
+      }
+
+      .panel__header,
+      .panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.15)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .panel__footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: none;
+      }
+
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.4vw, 28px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 2px 8px rgba(241, 199, 74, 0.18));
+      }
+
+      .pulse-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+
+      .header__right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .status {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .lang-toggle {
+        display: flex;
+        gap: 6px;
+      }
+
+      .lang-toggle button {
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        background: rgba(241, 199, 74, 0.1);
+        color: var(--gold-1);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .lang-toggle button[aria-pressed="true"] {
+        background: linear-gradient(180deg, var(--gold-2), var(--gold-3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+
+      .question {
+        margin: 10px 22px 6px;
+        padding: 10px 14px;
+        font-weight: 800;
+        font-size: clamp(16px, 2.2vw, 20px);
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+      }
+
+      .winner {
+        margin: 10px 22px 6px;
+        padding: 10px 14px;
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+      }
+
+      .winner__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+      .winner__label {
+        font-weight: 800;
+      }
+      .winner__percent {
+        font-weight: 900;
+      }
+
+      .winner__bar {
+        margin-top: 8px;
+        height: 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+
+      .winner__fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(
+          90deg,
+          var(--gold-3),
+          var(--gold-2),
+          var(--gold-1)
+        );
+        transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .poll {
+        list-style: none;
+        margin: 6px 0 0;
+        padding: 10px 22px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .option {
+        display: grid;
+        grid-template-columns: 42px 1fr 120px;
+        gap: 14px;
+        align-items: center;
+        padding: 12px 14px;
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .option::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(126, 200, 255, 0.22),
+          transparent 30%
+        );
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+      }
+
+      .option--animate::after {
+        opacity: 0.2;
+        animation: shimmer 1.2s ease;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .opt-media {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .opt-media .badge {
+        width: 28px;
+        height: 28px;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        font-weight: 900;
+        background: linear-gradient(
+          180deg,
+          rgba(241, 199, 74, 0.28),
+          rgba(241, 199, 74, 0.08)
+        );
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        color: var(--gold-1);
+      }
+
+      .opt-name {
+        font-weight: 800;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .opt-sub {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .opt-right {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .bar {
+        grid-column: 2 / -1;
+        height: 10px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.06);
+        overflow: hidden;
+      }
+
+      .bar__fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--accent), var(--gold-2));
+        transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      @media (max-width: 560px) {
+        .option {
+          grid-template-columns: 38px 1fr 90px;
+        }
+        .opt-right {
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="safe-area">
+      <section class="panel">
+        <header class="panel__header">
+          <div class="header__left">
+            <span aria-hidden="true">
+              <svg
+                viewBox="0 0 64 64"
+                width="28"
+                height="28"
+                role="img"
+                aria-label="Poll"
+              >
+                <defs>
+                  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f8e49c" />
+                    <stop offset="50%" stop-color="#f1c74a" />
+                    <stop offset="100%" stop-color="#b98a28" />
+                  </linearGradient>
+                </defs>
+                <path
+                  fill="url(#gold)"
+                  d="M8 48h10V16H8v32zm19 0h10V28H27v20zm19 0h10V8H46v40z"
+                />
+              </svg>
+            </span>
+            <h1 id="title">Fan Poll</h1>
+            <span class="pulse-dot" title="Live"></span>
+          </div>
+          <div class="header__right">
+            <div class="status" id="status">
+              <span>Status: </span><strong>Live</strong>
+              <span class="small" id="modeLabel"></span>
+            </div>
+            <div class="lang-toggle" role="group" aria-label="Language">
+              <button data-lang="en" aria-pressed="true">ENG</button>
+              <button data-lang="es" aria-pressed="false">ESP</button>
+              <button data-lang="fr" aria-pressed="false">FRA</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="question" id="questionBox">—</div>
+
+        <div class="winner" aria-live="polite">
+          <div class="winner__row">
+            <div class="winner__label" id="winnerLabel">Leading: —</div>
+            <div class="winner__percent" id="winnerPercent">0%</div>
+          </div>
+          <div class="winner__bar">
+            <div class="winner__fill" id="winnerFill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <ol
+          id="poll"
+          class="poll"
+          aria-live="polite"
+          aria-relevant="additions text"
+        ></ol>
+
+        <footer class="panel__footer">
+          <div class="small" id="footnote">
+            <!-- NEW: Updated the JSON filename in the UI to match the new structure -->
+            Data source: <strong>/data/overlay/poll.json</strong> (auto-refresh,
+            multilingual).
+          </div>
+          <div class="small" id="lastUpdate">—</div>
+        </footer>
+      </section>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(location.search);
+      // NEW: Updated default path to align with Master JSON output folder
+      const POLLS_URL =
+        params.get("polls") || params.get("json") || "/data/overlay/poll.json";
+
+      const spec = (params.get("lang") || "rotate:en,es,fr").toLowerCase();
+      const rotateSpec = spec.startsWith("rotate:")
+        ? spec
+            .replace("rotate:", "")
+            .split(",")
+            .map((s) => s.trim())
+        : null;
+      const ROTATE_INTERVAL = Math.max(
+        5,
+        parseInt(params.get("lang_interval") || "12", 10),
+      );
+      let LANG = resolveInitialLang(spec);
+      let _rotateTimer = null;
+
+      function resolveInitialLang(spec) {
+        if (spec === "auto") {
+          const nav = (navigator.language || "en").slice(0, 2);
+          return ["en", "es", "fr"].includes(nav) ? nav : "en";
+        }
+        if (spec.startsWith("rotate:"))
+          return (rotateSpec && rotateSpec[0]) || "en";
+        return ["en", "es", "fr"].includes(spec) ? spec : "en";
+      }
+
+      function startRotation() {
+        if (!rotateSpec) return;
+        let i = rotateSpec.indexOf(LANG);
+        if (i < 0) i = 0;
+        clearInterval(_rotateTimer);
+        _rotateTimer = setInterval(() => {
+          i = (i + 1) % rotateSpec.length;
+          setLang(rotateSpec[i]);
+        }, ROTATE_INTERVAL * 1000);
+      }
+
+      const UI_I18N = {
+        en: {
+          title: "Fan Poll",
+          status: "Status: ",
+          live: "Live",
+          foot: "Data source: /data/overlay/poll.json (auto-refresh, multilingual)",
+        },
+        es: {
+          title: "Encuesta de Fans",
+          status: "Estado: ",
+          live: "En vivo",
+          foot: "Fuente: /data/overlay/poll.json (auto-actualiza, multilingüe)",
+        },
+        fr: {
+          title: "Sondage des Fans",
+          status: "Statut : ",
+          live: "En direct",
+          foot: "Source : /data/overlay/poll.json (actualisation auto, multilingue)",
+        },
+      };
+
+      const DEMO = {
+        version: "1.1",
+        current_poll: {
+          question: {
+            en: "Which is your favorite?",
+            es: "¿Cuál es tu favorito?",
+            fr: "Quel est votre préféré ?",
+          },
+          refresh: 10,
+          options: [
+            {
+              id: "foot-fetish",
+              label: {
+                en: "Foot Fetish",
+                es: "Fetiche de pies",
+                fr: "Fétichisme des pieds",
+              },
+              value: 28,
+            },
+            {
+              id: "bikini-try-on",
+              label: {
+                en: "Bikini Try On",
+                es: "Prueba de bikini",
+                fr: "Essayage de bikini",
+              },
+              value: 22,
+            },
+            {
+              id: "dance-challenge",
+              label: {
+                en: "Dance Challenge",
+                es: "Reto de baile",
+                fr: "Défi danse",
+              },
+              value: 20,
+            },
+            {
+              id: "lineup-beauty-pick",
+              label: {
+                en: "Lineup Beauty Pick",
+                es: "Elección de belleza",
+                fr: "Choix beauté",
+              },
+              value: 18,
+            },
+            {
+              id: "cos-play",
+              label: { en: "COS Play", es: "COS Play", fr: "COS Play" },
+              value: 12,
+            },
+          ],
+        },
+      };
+
+      let cfg = null;
+      let REFRESH = 10;
+
+      const questionBox = document.getElementById("questionBox");
+      const listEl = document.getElementById("poll");
+      const lastUpdateEl = document.getElementById("lastUpdate");
+      const winnerLabelEl = document.getElementById("winnerLabel");
+      const winnerPercentEl = document.getElementById("winnerPercent");
+      const winnerFillEl = document.getElementById("winnerFill");
+
+      function tr(v) {
+        if (v && typeof v === "object")
+          return v[LANG] || v.en || v.es || v.fr || Object.values(v)[0];
+        return v;
+      }
+
+      function el(tag, cls, text) {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text != null) e.textContent = text;
+        return e;
+      }
+
+      function applyChrome() {
+        const d = UI_I18N[LANG] || UI_I18N.en;
+        document.getElementById("title").textContent = d.title;
+        document.getElementById("status").firstChild.textContent = d.status;
+        document.getElementById("status").querySelector("strong").textContent =
+          d.live;
+        document.getElementById("footnote").textContent = d.foot;
+      }
+
+      async function loadPolls() {
+        try {
+          const res = await fetch(POLLS_URL, { cache: "no-cache" });
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          cfg = await res.json();
+        } catch (e) {
+          console.warn(
+            "Could not load poll JSON, using built-in DEMO data. Error:",
+            e.message,
+          );
+          cfg = DEMO; // Fallback to DEMO if fetch fails
+        }
+
+        const poll = cfg.current_poll || {};
+        REFRESH = Number(params.get("refresh") || poll.refresh || 10);
+        document.getElementById("modeLabel").textContent =
+          ` • Every ${REFRESH}s`;
+        renderFromCfg();
+        lastUpdateEl.textContent =
+          new Date().toLocaleTimeString() + (cfg === DEMO ? " • demo" : "");
+      }
+
+      function schedule() {
+        setInterval(loadPolls, REFRESH * 1000);
+      }
+
+      function renderFromCfg() {
+        if (!cfg) return;
+        applyChrome();
+        const poll = cfg.current_poll || { options: [] };
+        questionBox.textContent = tr(poll.question) || "—";
+        const seriesRaw = (poll.options || []).map((o, i) => ({
+          letter: String.fromCharCode(65 + i),
+          label: tr(o.label || "Option " + (i + 1)),
+          value: Number(o.value || 0),
+        }));
+
+        let sum = seriesRaw.reduce((a, b) => a + b.value, 0);
+        if (sum <= 0) sum = 1;
+
+        const series = seriesRaw.map((s) => ({
+          ...s,
+          pct: Math.round((s.value / sum) * 100),
+        }));
+
+        const top = series.slice().sort((a, b) => b.pct - a.pct)[0] || {
+          label: "—",
+          pct: 0,
+        };
+        winnerLabelEl.textContent = `Leading: ${top.label}`;
+        winnerPercentEl.textContent = `${top.pct}%`;
+        winnerFillEl.style.width = `${top.pct}%`;
+
+        listEl.innerHTML = "";
+        series.forEach((opt) => {
+          const li = el("li", "option");
+          const media = el("div", "opt-media");
+          media.appendChild(el("div", "badge", opt.letter));
+          const nameBlock = el("div");
+          nameBlock.appendChild(el("div", "opt-name", opt.label));
+          nameBlock.appendChild(el("div", "opt-sub", `${opt.pct}%`));
+          const right = el("div", "opt-right", `${opt.pct}%`);
+          const bar = el("div", "bar");
+          const fill = el("div", "bar__fill");
+          fill.style.width = opt.pct + "%";
+          bar.appendChild(fill);
+
+          li.appendChild(media);
+          li.appendChild(nameBlock);
+          li.appendChild(right);
+          li.appendChild(bar);
+
+          requestAnimationFrame(() => {
+            li.classList.add("option--animate");
+            setTimeout(() => li.classList.remove("option--animate"), 700);
+          });
+          listEl.appendChild(li);
+        });
+      }
+
+      document.querySelectorAll(".lang-toggle button").forEach((b) => {
+        b.addEventListener("click", () => {
+          clearInterval(_rotateTimer);
+          setLang(b.dataset.lang);
+        });
+      });
+
+      function setLang(code) {
+        LANG = ["en", "es", "fr"].includes(code) ? code : "en";
+        document
+          .querySelectorAll(".lang-toggle button")
+          .forEach((x) =>
+            x.setAttribute("aria-pressed", String(x.dataset.lang === LANG)),
+          );
+        renderFromCfg();
+      }
+
+      /* --- Kickoff --- */
+      cfg = DEMO;
+      setLang(LANG);
+      startRotation();
+      renderFromCfg();
+      loadPolls().then(schedule);
+
+      /* --- QA Panel & Latency Test Listener --- */
+      window.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "poll.update") {
+          console.log("[Test Panel] Received new poll data:", event.data.data);
+          cfg = event.data.data;
+          renderFromCfg();
+        }
+        if (event.data && event.data.type === "latency_ping") {
+          window.parent.postMessage(
+            { type: "latency_pong", start: event.data.start },
+            "*",
+          );
+        }
+      });
+    </script>
+  </body>
+</html>

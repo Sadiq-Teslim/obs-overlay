@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LBC • Top Fan Ranking</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #2a2e36;
+        --panel-2: #20242b;
+        --text: #e9edf2;
+        --muted: #a7b0bc;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --success: #39d98a;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(241, 199, 74, 0.15),
+            transparent 40%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(185, 138, 40, 0.1),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          "Poppins",
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans,
+          "Apple Color Emoji",
+          "Segoe UI Emoji";
+        letter-spacing: 0.2px;
+        overflow-x: hidden;
+      }
+
+      #safe-area {
+        padding: clamp(16px, 2vw, 24px);
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }
+
+      .panel {
+        width: min(600px, 92vw);
+        margin: auto;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: var(--shadow);
+        position: relative;
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+      }
+
+      .panel__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: clamp(14px, 1.5vw, 18px) clamp(18px, 2vw, 22px);
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.15)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: clamp(14px, 1.5vw, 18px) clamp(18px, 2vw, 22px);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: none;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: clamp(10px, 1vw, 12px);
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.2vw, 26px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        filter: drop-shadow(0 2px 8px rgba(241, 199, 74, 0.18));
+      }
+
+      .pulse-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+
+      .header__right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .season {
+        padding: 6px 12px;
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        border-radius: 999px;
+        font-size: clamp(12px, 1.2vw, 14px);
+        color: var(--gold-1);
+      }
+
+      .status {
+        font-size: clamp(12px, 1.2vw, 14px);
+        color: var(--muted);
+      }
+
+      .lang-toggle {
+        display: flex;
+        gap: 6px;
+      }
+
+      .lang-toggle button {
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        background: rgba(241, 199, 74, 0.1);
+        color: var(--gold-1);
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: clamp(12px, 1.2vw, 14px);
+        font-weight: 800;
+        cursor: pointer;
+      }
+
+      .lang-toggle button[aria-pressed="true"] {
+        background: linear-gradient(180deg, var(--gold-2), var(--gold-3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+
+      .leaderboard {
+        list-style: none;
+        margin: 0;
+        padding: 10px 22px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 50px minmax(0, 1fr) auto;
+        gap: 14px;
+        align-items: center;
+        padding: 14px 16px;
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 14px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .row::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(241, 199, 74, 0.18),
+          transparent 30%
+        );
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s;
+      }
+
+      .row--animate::after {
+        opacity: 0.2;
+        animation: shimmer 1.2s ease;
+      }
+
+      @keyframes shimmer {
+        0% {
+          transform: translateX(-100%);
+        }
+        100% {
+          transform: translateX(100%);
+        }
+      }
+
+      .rank {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: clamp(18px, 1.8vw, 22px);
+        background: linear-gradient(
+          180deg,
+          rgba(241, 199, 74, 0.28),
+          rgba(241, 199, 74, 0.08)
+        );
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        color: var(--gold-1);
+      }
+
+      .user {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+      }
+
+      .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+        background: #111;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+      }
+
+      .avatar img {
+        width: 40px;
+        height: 40px;
+        display: block;
+      }
+
+      .username {
+        font-weight: 700;
+        font-size: clamp(16px, 1.6vw, 20px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .badges {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-wrap: wrap;
+      }
+
+      .amount {
+        justify-self: end;
+        font-variant-numeric: tabular-nums;
+        font-weight: 800;
+        font-size: clamp(16px, 1.6vw, 20px);
+      }
+
+      .crown {
+        margin-left: 6px;
+        display: inline-grid;
+        place-items: center;
+        filter: drop-shadow(0 4px 14px rgba(241, 199, 74, 0.35));
+        animation: float 3s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-3px);
+        }
+      }
+
+      .progress {
+        grid-column: 2 / -1;
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.3);
+        margin-top: -4px;
+      }
+
+      .progress__bar {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--gold-3), var(--gold-2));
+        transition: width 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+
+      .badge {
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #111;
+        font-weight: 800;
+        letter-spacing: 0.4px;
+        background: linear-gradient(180deg, #fff, #d7d7d7);
+      }
+
+      .badge--diamond {
+        background: linear-gradient(180deg, #e8f4ff, #b3d6ff);
+        color: #0b2942;
+        border-color: #8dbef1;
+      }
+
+      .badge--flame {
+        background: linear-gradient(180deg, #ffe2cc, #ffc199);
+        color: #5b2b00;
+        border-color: #ffb37e;
+      }
+
+      .badge--star {
+        background: linear-gradient(180deg, #fff7cc, #ffe483);
+        color: #5b4b00;
+        border-color: #f1d76a;
+      }
+
+      .cta {
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        color: var(--gold-1);
+        font-size: clamp(14px, 1.4vw, 16px);
+      }
+
+      .legend {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="safe-area">
+      <section class="panel">
+        <header class="panel__header">
+          <div class="header__left">
+            <span class="trophy" aria-hidden="true">
+              <svg
+                viewBox="0 0 64 64"
+                width="28"
+                height="28"
+                role="img"
+                aria-label="Trophy"
+              >
+                <defs>
+                  <linearGradient id="gold" x1="0" y="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f8e49c" />
+                    <stop offset="50%" stop-color="#f1c74a" />
+                    <stop offset="100%" stop-color="#b98a28" />
+                  </linearGradient>
+                </defs>
+                <path
+                  fill="url(#gold)"
+                  d="M12 10h40v8c0 7.7-6.3 14-14 14h-2.1c-1.7 2.4-4.6 4-7.9 4s-6.2-1.6-7.9-4H18C10.3 32 4 25.7 4 18v-8h8zm0 4H8v4c0 5.5 4.5 10 10 10h2.3A17.8 17.8 0 0112 14zm44 0h-4a17.8 17.8 0 01-8.3 14H46c5.5 0 10-4.5 10-10v-4zM26 42h12v4H26v-4zm-4 6h20v4H20v-4z"
+                />
+              </svg>
+            </span>
+            <h1 id="title">Top Fan Ranking</h1>
+            <span class="pulse-dot" title="Live"></span>
+          </div>
+          <div class="header__right">
+            <div class="season">
+              <span id="season-label" data-i18n="season">This Week</span>
+            </div>
+            <div class="status" id="ws-status">
+              Status: <strong>Live</strong>
+            </div>
+            <div class="lang-toggle" role="group" aria-label="Language">
+              <button data-lang="en" aria-pressed="true">ENG</button>
+              <button data-lang="es" aria-pressed="false">ESP</button>
+              <button data-lang="fr" aria-pressed="false">FRA</button>
+            </div>
+          </div>
+        </header>
+
+        <ol
+          id="leaderboard"
+          class="leaderboard"
+          aria-live="polite"
+          aria-relevant="additions text"
+        ></ol>
+
+        <footer class="panel__footer">
+          <div class="cta">
+            <span id="cta" data-i18n="cta">Tip now to enter the Top 3</span>
+          </div>
+          <div class="legend">
+            <span
+              id="badge-diamond"
+              class="badge badge--diamond"
+              data-i18n="diamond"
+              >DIAMOND $1k+</span
+            >
+            <span id="badge-flame" class="badge badge--flame" data-i18n="flame"
+              >FLAME $500+</span
+            >
+            <span id="badge-star" class="badge badge--star" data-i18n="star"
+              >STAR $100+</span
+            >
+          </div>
+        </footer>
+      </section>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(location.search);
+      const ROOM = params.get("room_id") || "demo_room";
+
+      // NEW: Updated data paths to point to the Master Poller output directories
+      const WS_PARAM =
+        params.get("ws") || "wss://overlays.lbc.domain/ws/events";
+      const JSON_PARAM = params.get("json") || "/data/overlay/leaderboard.json";
+
+      const listEl = document.getElementById("leaderboard");
+      const statusEl = document.getElementById("ws-status");
+
+      const I18N = {
+        en: {
+          title: "Top Fan Ranking",
+          season: "This Week",
+          cta: "Tip now to enter the Top 3",
+          diamond: "DIAMOND $1k+",
+          flame: "FLAME $500+",
+          star: "STAR $100+",
+        },
+        es: {
+          title: "Ranking de Fans",
+          season: "Esta semana",
+          cta: "Dona ahora para entrar al Top 3",
+          diamond: "DIAMANTE $1k+",
+          flame: "LLAMA $500+",
+          star: "ESTRELLA $100+",
+        },
+        fr: {
+          title: "Classement des Fans",
+          season: "Cette semaine",
+          cta: "Contribuez pour entrer dans le Top 3",
+          diamond: "DIAMANT 1k$+",
+          flame: "FLAMME 500$+",
+          star: "ÉTOILE 100$+",
+        },
+      };
+
+      const TIERS = [
+        { key: "diamond", name: "DIAMOND", min: 1000 },
+        { key: "flame", name: "FLAME", min: 500 },
+        { key: "star", name: "STAR", min: 100 },
+      ];
+
+      let supporters = [];
+      let lastPollState = null;
+
+      // Render seed data on initial load
+      render([
+        { name: "ElReyAzul", amount: 1250, country: "DO" },
+        { name: "SirGold", amount: 740, country: "US" },
+        { name: "AnónimoVIP", amount: 520, country: "MX" },
+        { name: "Luna", amount: 280, country: "AR" },
+        { name: "ShadowCat", amount: 130, country: "BR" },
+      ]);
+
+      // --- Real-time WebSocket connection ---
+      if (WS_PARAM) {
+        try {
+          const ws = new WebSocket(WS_PARAM);
+
+          ws.onopen = () => {
+            statusEl.innerHTML = "Status: <strong>Live</strong>";
+            // NEW: Subscription payload per backend dev docs
+            ws.send(JSON.stringify({ type: "subscribe", room_id: ROOM }));
+          };
+
+          ws.onclose = () =>
+            (statusEl.innerHTML = "Status: <strong>Reconnecting...</strong>");
+
+          ws.onmessage = (evt) => {
+            try {
+              const msg = JSON.parse(evt.data);
+              // Handle nested event structure from new backend
+              const payload = msg.event ? msg.event : msg;
+
+              if (payload.event_type === "tip" || payload.type === "tip") {
+                const {
+                  name,
+                  amount = 0,
+                  avatar_url,
+                  country,
+                } = normalizeUserMsg(payload);
+                let u = supporters.find((s) => s.name === name);
+                if (!u) {
+                  u = { name, amount: 0, avatar_url, country };
+                  supporters.push(u);
+                }
+                u.amount = Number(u.amount || 0) + Number(amount || 0);
+                if (avatar_url && !u.avatar_url) u.avatar_url = avatar_url;
+                render(supporters);
+              } else if (payload.type === "replace_all") {
+                supporters = (payload.supporters || []).map((s) => ({
+                  ...s,
+                  amount: Number(s.amount || 0),
+                }));
+                render(supporters);
+              } else if (payload.type === "alias_update") {
+                const idOrName = payload.user
+                  ? payload.user.id || payload.user.name
+                  : null;
+                if (idOrName) {
+                  const u = supporters.find(
+                    (x) => x.id === idOrName || x.name === idOrName,
+                  );
+                  if (u) {
+                    if (payload.name) u.name = payload.name;
+                    if (payload.alias) u.alias = payload.alias;
+                    if (payload.avatar_url) u.avatar_url = payload.avatar_url;
+                    if (payload.country) u.country = payload.country;
+                    render(supporters);
+                  }
+                }
+              }
+            } catch (e) {
+              console.error("Error processing WebSocket message:", e);
+            }
+          };
+        } catch (e) {
+          console.error("Error establishing WebSocket connection:", e);
+        }
+      }
+
+      // --- JSON File Polling connection (Fallback to Master Poller JSON) ---
+      if (JSON_PARAM) {
+        const pollInterval = Number(params.get("json_ms") || 15000); // Polling faster for Master Poller
+        const pollDataSource = () => {
+          fetch(JSON_PARAM, { cache: "no-cache" })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data && data.supporters) {
+                const currentState = JSON.stringify(data.supporters);
+                if (currentState !== lastPollState) {
+                  console.log(
+                    "[Polling] New data found in JSON file. Rendering.",
+                  );
+                  lastPollState = currentState;
+                  supporters = data.supporters;
+                  render(supporters);
+                }
+              }
+            })
+            .catch((err) => console.warn("Could not poll JSON file:", err));
+        };
+        setInterval(pollDataSource, pollInterval);
+        pollDataSource(); // Initial fetch
+      }
+
+      function normalizeUserMsg(msg) {
+        // Fallback for new vs old backend payload structures
+        const username =
+          msg.username || (msg.user && msg.user.name) || "Anonymous";
+        return {
+          name: username,
+          avatar_url: msg.user?.avatar_url || null,
+          country: msg.user?.country || null,
+          amount: msg.amount_tokens || msg.amount,
+        };
+      }
+
+      /* --- Language Toggle & Automatic Switcher --- */
+      const langBtns = document.querySelectorAll(".lang-toggle button");
+      const languages = ["en", "es", "fr"];
+      let currentLangIndex = 0;
+
+      langBtns.forEach((b) =>
+        b.addEventListener("click", () => {
+          clearInterval(languageInterval);
+          setLang(b.dataset.lang);
+        }),
+      );
+
+      function setLang(code) {
+        const newIndex = languages.indexOf(code);
+        if (newIndex !== -1) currentLangIndex = newIndex;
+        langBtns.forEach((b) =>
+          b.setAttribute("aria-pressed", String(b.dataset.lang === code)),
+        );
+        const d = I18N[code] || I18N.en;
+        document.getElementById("title").textContent = d.title;
+        document.querySelector('[data-i18n="season"]').textContent = d.season;
+        document.querySelector('[data-i18n="cta"]').textContent = d.cta;
+        document.querySelector('[data-i18n="diamond"]').textContent = d.diamond;
+        document.querySelector('[data-i18n="flame"]').textContent = d.flame;
+        document.querySelector('[data-i18n="star"]').textContent = d.star;
+      }
+
+      const languageInterval = setInterval(() => {
+        currentLangIndex = (currentLangIndex + 1) % languages.length;
+        setLang(languages[currentLangIndex]);
+      }, 15000);
+
+      /* --- Render Function --- */
+      function render(arr) {
+        const rows = arr
+          .map((s) => ({ ...s, amount: Number(s.amount || 0) }))
+          .sort((a, b) => b.amount - a.amount)
+          .slice(0, 10);
+        const topAmount = rows[0] ? rows[0].amount || 1 : 1;
+
+        listEl.innerHTML = "";
+        rows.forEach((user, idx) => {
+          const row = document.createElement("li");
+          row.className = "row";
+          const rank = el("div", "rank", idx + 1);
+          const userCell = el("div", "user");
+          const avatarEl = el("div", "avatar");
+          const img = document.createElement("img");
+          img.alt = `${user.name} avatar`;
+          img.width = 40;
+          img.height = 40;
+          img.src = user.avatar_url
+            ? user.avatar_url
+            : generateAvatarDataURI(user.name);
+          avatarEl.appendChild(img);
+          const nameEl = el("div", "username", user.name);
+          if (idx === 0) {
+            const crown = document.createElement("span");
+            crown.className = "crown";
+            nameEl.insertBefore(crown, nameEl.firstChild);
+          }
+          const badges = el("div", "badges");
+          const tier = tierFor(user.amount);
+          if (tier) {
+            badges.appendChild(
+              el("span", `badge badge--${tier.key}`, tier.name),
+            );
+          }
+          if (user.country) {
+            badges.appendChild(
+              el("span", "badge", String(user.country).toUpperCase()),
+            );
+          }
+          const block = document.createElement("div");
+          block.style.minWidth = "0";
+          block.appendChild(nameEl);
+          block.appendChild(badges);
+          userCell.appendChild(avatarEl);
+          userCell.appendChild(block);
+          const amount = el("div", "amount", formatCurrency(user.amount));
+          const progressWrap = el("div", "progress");
+          const bar = el("div", "progress__bar");
+          const percentage = Math.min(100, (user.amount / topAmount) * 100);
+          bar.style.width = percentage + "%";
+          progressWrap.appendChild(bar);
+          row.appendChild(rank);
+          row.appendChild(userCell);
+          row.appendChild(amount);
+          row.appendChild(progressWrap);
+          requestAnimationFrame(() => {
+            row.classList.add("row--animate");
+            setTimeout(() => row.classList.remove("row--animate"), 700);
+          });
+          listEl.appendChild(row);
+        });
+      }
+
+      /* --- Helper & Avatar Functions --- */
+      function el(tag, cls, text) {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (text != null) e.textContent = text;
+        return e;
+      }
+
+      function tierFor(v) {
+        for (const t of TIERS) {
+          if (v >= t.min) return t;
+        }
+        return null;
+      }
+
+      function formatCurrency(v) {
+        return new Intl.NumberFormat(undefined, {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        }).format(v);
+      }
+
+      function generateAvatarDataURI(name = "User") {
+        const hash = hashCode(name);
+        const hue = Math.abs(hash) % 360;
+        const bgHue = (hue + 200) % 360;
+        const fg = `hsl(${hue},75%,55%)`;
+        const bg = `hsl(${bgHue},70%,14%)`;
+        const size = 5;
+        const cell = 10;
+        const half = Math.ceil(size / 2);
+        let rects = "";
+        for (let y = 0; y < size; y++) {
+          for (let x = 0; x < half; x++) {
+            const on = bit(hash, y * half + x);
+            if (on) {
+              const X = x * cell,
+                Y = y * cell;
+              rects += `<rect x="${X}" y="${Y}" width="${cell}" height="${cell}" rx="1.5" ry="1.5" fill="${fg}" />`;
+              const mx = (size - 1 - x) * cell;
+              rects += `<rect x="${mx}" y="${Y}" width="${cell}" height="${cell}" rx="1.5" ry="1.5" fill="${fg}" />`;
+            }
+          }
+        }
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 ${size * cell} ${size * cell}"><defs><clipPath id="r"><rect x="0" y="0" width="${size * cell}" height="${size * cell}" rx="${size * cell}" ry="${size * cell}"/></clipPath></defs><rect width="100%" height="100%" fill="${bg}"/><g clip-path="url(#r)">${rects}</g></svg>`;
+        return (
+          "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg)))
+        );
+      }
+
+      function hashCode(str) {
+        let h = 0;
+        for (let i = 0; i < str.length; i++) {
+          h = (h << 5) - h + str.charCodeAt(i);
+          h |= 0;
+        }
+        return h;
+      }
+
+      function bit(num, pos) {
+        let x = (num ^ (pos * 0x45d9f3b)) >>> 0;
+        x ^= x << 13;
+        x ^= x >>> 17;
+        x ^= x << 5;
+        return (x & 1) === 1;
+      }
+
+      /* --- Latency Test & QA Panel Listener --- */
+      window.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "latency_ping") {
+          window.parent.postMessage(
+            { type: "latency_pong", start: event.data.start },
+            "*",
+          );
+        }
+        if (event.data && event.data.type === "lb.update") {
+          render(event.data.items);
+        }
+      });
+    </script>
+  </body>
+</html>

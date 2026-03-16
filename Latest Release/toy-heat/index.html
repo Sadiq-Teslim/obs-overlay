@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LBC • Interactive Toy Heat</title>
+    <style>
+      :root {
+        --bg: #0d0f12;
+        --panel: #2a2e36;
+        --panel-2: #20242b;
+        --text: #e9edf2;
+        --muted: #a7b0bc;
+        --gold-1: #f8e49c;
+        --gold-2: #f1c74a;
+        --gold-3: #b98a28;
+        --success: #39d98a;
+        --accent: #ff4d85;
+        --danger: #ff6b6b;
+        --shadow: 0 10px 24px rgba(0, 0, 0, 0.45);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1200px 700px at 20% -10%,
+            rgba(255, 77, 133, 0.15),
+            transparent 40%
+          ),
+          radial-gradient(
+            1600px 900px at 120% 120%,
+            rgba(241, 199, 74, 0.1),
+            transparent 40%
+          ),
+          var(--bg);
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          "Helvetica Neue",
+          Arial,
+          Noto Sans;
+        letter-spacing: 0.2px;
+        overflow-x: hidden;
+      }
+      #safe-area {
+        padding: clamp(16px, 2vw, 24px);
+        display: grid;
+        place-items: center;
+        min-height: 100vh;
+      }
+      .panel {
+        width: min(800px, 92vw);
+        margin: auto;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.04),
+          rgba(255, 255, 255, 0.02)
+        );
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: var(--shadow);
+        position: relative;
+        overflow: hidden;
+      }
+      .panel__header,
+      .panel__footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 22px;
+        background: linear-gradient(
+          180deg,
+          rgba(0, 0, 0, 0.3),
+          rgba(0, 0, 0, 0.15)
+        );
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .panel__footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        border-bottom: none;
+      }
+      .header__left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(20px, 2.4vw, 28px);
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        background: linear-gradient(
+          90deg,
+          var(--gold-1),
+          var(--gold-2),
+          var(--gold-3)
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+      .pulse-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--success);
+        box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0.7);
+        }
+        70% {
+          box-shadow: 0 0 0 12px rgba(57, 217, 138, 0);
+        }
+        100% {
+          box-shadow: 0 0 0 0 rgba(57, 217, 138, 0);
+        }
+      }
+      .header__right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .lang-toggle {
+        display: flex;
+        gap: 6px;
+      }
+      .lang-toggle button {
+        border: 1px solid rgba(241, 199, 74, 0.35);
+        background: rgba(241, 199, 74, 0.1);
+        color: var(--gold-1);
+        padding: 4px 8px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+      }
+      .lang-toggle button[aria-pressed="true"] {
+        background: linear-gradient(180deg, var(--gold-2), var(--gold-3));
+        color: #111;
+        border-color: rgba(0, 0, 0, 0.2);
+      }
+      .content {
+        padding: 22px;
+      }
+
+      .intensity-wrap {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+      .intensity-val {
+        font-size: 64px;
+        font-weight: 900;
+        background: linear-gradient(180deg, #fff, var(--accent));
+        -webkit-background-clip: text;
+        color: transparent;
+        line-height: 1;
+        text-shadow: 0 4px 12px rgba(255, 77, 133, 0.3);
+      }
+      .intensity-label {
+        font-size: 16px;
+        color: var(--gold-1);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 16px;
+      }
+
+      .segments {
+        display: flex;
+        gap: 4px;
+        height: 24px;
+        border-radius: 4px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.4);
+        padding: 4px;
+      }
+      .segment {
+        flex: 1;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.1);
+        transition: background 0.3s;
+      }
+      .segment.active {
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-top: 24px;
+      }
+      .card {
+        background: linear-gradient(180deg, var(--panel), var(--panel-2));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .card h3 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .action-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-size: 14px;
+      }
+      .action-list li {
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+      }
+      .action-list li:last-child {
+        border: none;
+      }
+      .battery {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 800;
+        font-size: 20px;
+        color: var(--success);
+      }
+
+      .small {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      @media (max-width: 560px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="safe-area">
+      <section class="panel">
+        <header class="panel__header">
+          <div class="header__left">
+            <h1 id="title">Interactive Toy</h1>
+            <span class="pulse-dot" title="Live"></span>
+          </div>
+          <div class="header__right">
+            <div class="lang-toggle" role="group">
+              <button data-lang="en" aria-pressed="true">ENG</button>
+              <button data-lang="es" aria-pressed="false">ESP</button>
+              <button data-lang="fr" aria-pressed="false">FRA</button>
+            </div>
+          </div>
+        </header>
+
+        <div class="content">
+          <div class="intensity-wrap">
+            <div class="intensity-label" id="intensityLabel">
+              Current Intensity
+            </div>
+            <div class="intensity-val" id="levelValue">LVL 4</div>
+            <div class="segments" id="segmentsBox">
+              <!-- JS injected segments -->
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="card">
+              <h3 id="recentHeader">Recent Triggers</h3>
+              <ul class="action-list" id="actionList">
+                <!-- JS Injected -->
+              </ul>
+            </div>
+            <div class="card">
+              <h3 id="batteryHeader">Toy Status</h3>
+              <div class="battery">
+                <span>Battery</span>
+                <span id="batteryValue">85%</span>
+              </div>
+              <div class="small" style="margin-top: 12px" id="toyName">
+                Device: Lush 3
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <footer class="panel__footer">
+          <div class="small" id="footnote">
+            Source: <strong>/data/overlay/toy-heat.json</strong>
+          </div>
+          <div class="small" id="clock"></div>
+        </footer>
+      </section>
+    </div>
+
+    <script>
+      const params = new URLSearchParams(location.search);
+      const JSON_URL = params.get("json") || "/data/overlay/toy-heat.json";
+      const WS_URL = params.get("ws") || "wss://overlays.lbc.domain/ws/events";
+      const ROOM = params.get("room_id") || "demo_room";
+
+      const UI = {
+        en: {
+          title: "Interactive Toy",
+          int: "Current Intensity",
+          rec: "Recent Triggers",
+          bat: "Toy Status",
+        },
+        es: {
+          title: "Juguete Interactivo",
+          int: "Intensidad Actual",
+          rec: "Activaciones Recientes",
+          bat: "Estado",
+        },
+        fr: {
+          title: "Jouet Interactif",
+          int: "Intensité Actuelle",
+          rec: "Déclenchements Récents",
+          bat: "Statut",
+        },
+      };
+
+      const DEMO = {
+        level: 4,
+        max_level: 10,
+        battery: 85,
+        device_name: "Lush 3",
+        recent_actions: [
+          { user: "DaddyMax", action: "Vibrate 3s", amount: 50 },
+          { user: "AnonVIP", action: "Shock 1s", amount: 100 },
+        ],
+      };
+
+      let CFG = DEMO;
+      let LANG = "en";
+      let _langTimer = null;
+
+      function render() {
+        if (!CFG) CFG = DEMO;
+        document.getElementById("levelValue").textContent =
+          `LVL ${CFG.level || 0}`;
+        document.getElementById("batteryValue").textContent =
+          `${CFG.battery || 0}%`;
+        document.getElementById("toyName").textContent =
+          `Device: ${CFG.device_name || "Unknown"}`;
+
+        const segBox = document.getElementById("segmentsBox");
+        segBox.innerHTML = "";
+        const max = CFG.max_level || 10;
+        const current = CFG.level || 0;
+        for (let i = 1; i <= max; i++) {
+          const s = document.createElement("div");
+          s.className = `segment ${i <= current ? "active" : ""}`;
+          segBox.appendChild(s);
+        }
+
+        const list = document.getElementById("actionList");
+        list.innerHTML = "";
+        (CFG.recent_actions || []).slice(0, 3).forEach((a) => {
+          const li = document.createElement("li");
+          li.innerHTML = `<span><strong>${a.user}</strong> sent $${a.amount}</span><span style="color:var(--accent)">${a.action}</span>`;
+          list.appendChild(li);
+        });
+      }
+
+      function applyChrome() {
+        const t = UI[LANG] || UI.en;
+        document.getElementById("title").textContent = t.title;
+        document.getElementById("intensityLabel").textContent = t.int;
+        document.getElementById("recentHeader").textContent = t.rec;
+        document.getElementById("batteryHeader").textContent = t.bat;
+      }
+
+      function setLang(code) {
+        LANG = code;
+        document
+          .querySelectorAll(".lang-toggle button")
+          .forEach((b) =>
+            b.setAttribute("aria-pressed", String(b.dataset.lang === LANG)),
+          );
+        applyChrome();
+        render();
+      }
+
+      document.querySelectorAll(".lang-toggle button").forEach((b) =>
+        b.addEventListener("click", () => {
+          clearInterval(_langTimer);
+          setLang(b.dataset.lang);
+        }),
+      );
+      setInterval(() => {
+        const langs = ["en", "es", "fr"];
+        if (!document.hidden) setLang(langs[(langs.indexOf(LANG) + 1) % 3]);
+      }, 15000);
+
+      async function pollData() {
+        try {
+          const res = await fetch(JSON_URL, { cache: "no-cache" });
+          if (res.ok) {
+            CFG = await res.json();
+            render();
+          }
+        } catch (e) {}
+      }
+
+      if (WS_URL) {
+        try {
+          const ws = new WebSocket(WS_URL);
+          ws.onopen = () =>
+            ws.send(JSON.stringify({ type: "subscribe", room_id: ROOM }));
+          ws.onmessage = (evt) => {
+            try {
+              const msg = JSON.parse(evt.data);
+              const payload = msg.event ? msg.event : msg;
+              if (payload.type === "toy.update") {
+                CFG = payload.data;
+                render();
+              }
+            } catch (e) {}
+          };
+        } catch (e) {}
+      }
+
+      setLang("en");
+      pollData();
+      setInterval(pollData, 10000);
+      setInterval(() => {
+        document.getElementById("clock").textContent =
+          new Date().toLocaleTimeString();
+      }, 1000);
+    </script>
+  </body>
+</html>
